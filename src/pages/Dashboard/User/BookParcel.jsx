@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -11,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 
 const BookParcel = () => {
-  const { user } = useAuth(); // Logged-in user's data
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -26,7 +28,18 @@ const BookParcel = () => {
     longitude: "",
   });
 
-  const [price, setPrice] = useState(50); // Default price for 1kg
+  const [price, setPrice] = useState(50);
+  const {
+    data: locationData,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["locations"],
+    queryFn: async () => {
+      const response = await axios.get("/api/locations");
+      return response.data;
+    },
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -108,6 +121,9 @@ const BookParcel = () => {
       toast.error("Failed to book parcel. Please try again.");
     }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <motion.div
