@@ -13,7 +13,7 @@ const MyParcels = () => {
   const [filter, setFilter] = useState("all");
 
   const {
-    data: parcels,
+    data: parcels = [],
     isLoading,
     error,
   } = useQuery({
@@ -24,6 +24,7 @@ const MyParcels = () => {
         { credentials: "include" }
       );
       const data = await response.json();
+
       return data;
     },
     enabled: !!user?.email,
@@ -40,7 +41,7 @@ const MyParcels = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:9000/cancel-parcel/${id}`,
+        `import.meta.env.VITE_API_URL/cancel-parcel/${id}`,
         { method: "PATCH", credentials: "include" }
       );
       const data = await response.json();
@@ -101,7 +102,7 @@ const MyParcels = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredParcels.map((parcel) => (
+          {filteredParcels?.map((parcel) => (
             <tr key={parcel._id} className="text-center">
               <td className="border p-2">{parcel.parcelType}</td>
               <td className="border p-2">{parcel.deliveryDate}</td>
@@ -151,7 +152,7 @@ const MyParcels = () => {
           ))}
         </tbody>
       </table>
-      {filteredParcels.length === 0 && (
+      {filteredParcels?.length === 0 && (
         <p className="text-center text-gray-500 mt-4">No parcels found.</p>
       )}
 

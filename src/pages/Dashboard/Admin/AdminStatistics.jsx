@@ -1,10 +1,11 @@
 import ApexCharts from "react-apexcharts";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import { useBookingStats } from "../../../hooks/useBookingStats";
 
 const AdminStatistics = () => {
   const { data, error, isLoading } = useBookingStats();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error: {error.message}</div>;
 
   const barChartData = {

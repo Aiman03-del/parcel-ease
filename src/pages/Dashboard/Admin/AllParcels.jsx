@@ -7,12 +7,16 @@ import Modal from "react-modal";
 Modal.setAppElement("#root");
 
 const fetchParcels = async () => {
-  const { data } = await axios.get("http://localhost:9000/parcels");
+  const { data } = await axios.get("http://localhost:9000/parcels", {
+    withCredentials: true,
+  });
   return data;
 };
 
 const fetchDeliveryMen = async () => {
-  const { data } = await axios.get("http://localhost:9000/deliverymen");
+  const { data } = await axios.get("http://localhost:9000/deliverymen", {
+    withCredentials: true,
+  });
   return data;
 };
 

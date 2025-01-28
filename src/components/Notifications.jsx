@@ -9,9 +9,12 @@ const Notification = () => {
     // Fetch unread notifications
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get("http://localhost:9000/notifications", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "import.meta.env.VITE_API_URL/notifications",
+          {
+            withCredentials: true,
+          }
+        );
         setNotifications(res.data);
         setUnreadCount(res.data.length);
       } catch (error) {
@@ -25,7 +28,7 @@ const Notification = () => {
   const markAsRead = async () => {
     try {
       await axios.patch(
-        "http://localhost:9000/notifications/read",
+        "import.meta.env.VITE_API_URL/notifications/read",
         {},
         {
           withCredentials: true,

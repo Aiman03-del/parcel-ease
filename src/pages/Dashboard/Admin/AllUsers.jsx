@@ -4,10 +4,19 @@ import { useState } from "react";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const fetchUsers = async (page, limit) => {
-  const { data } = await axios.get(
-    `http://localhost:9000/users?page=${page}&limit=${limit}`
-  );
-  return data;
+  try {
+    const { data } = await axios.get(
+      `http://localhost:9000/users?page=${page}&limit=${limit}`,
+      { withCredentials: true }
+    );
+    return data;
+  } catch (error) {
+    console.error(
+      "Error fetching users:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
 };
 
 const AllUsers = () => {

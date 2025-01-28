@@ -55,18 +55,24 @@ const AuthProvider = ({ children }) => {
         setUser(currentUser);
 
         // Get JWT token
-        await axios.post(
+        const response = await axios.post(
           `${import.meta.env.VITE_API_URL}/jwt`,
           {
             email: currentUser?.email,
           },
           { withCredentials: true }
         );
+        if (response.data?.token) {
+          localStorage.setItem("token", response.data.token);
+        }
       } else {
         setUser(currentUser);
         await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {
           withCredentials: true,
         });
+
+        localStorage.removeItem("token");
+        console.log("Token removed from localStorage");
       }
       setLoading(false);
     });

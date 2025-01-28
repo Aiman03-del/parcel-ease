@@ -4,7 +4,9 @@ import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const AllDeliveryMen = () => {
   const fetchDeliveryMen = async () => {
-    const { data } = await axios.get("http://localhost:9000/deliverymen");
+    const { data } = await axios.get("http://localhost:9000/deliverymen", {
+      withCredentials: true,
+    });
     return data;
   };
 

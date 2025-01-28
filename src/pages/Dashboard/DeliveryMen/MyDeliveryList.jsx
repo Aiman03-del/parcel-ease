@@ -31,7 +31,7 @@ const MyDeliveryList = () => {
   // Mutation to update parcel status
   const updateParcelMutation = useMutation({
     mutationFn: async ({ parcelId, status }) => {
-      await axios.patch(`http://localhost:9000/parcels/${parcelId}`, {
+      await axios.patch(`import.meta.env.VITE_API_URL/parcels/${parcelId}`, {
         status,
       });
     },
