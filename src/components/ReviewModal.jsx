@@ -6,7 +6,7 @@ const ReviewModal = ({ isOpen, onClose, parcel, user }) => {
   const [rating, setRating] = useState(5);
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
-  console.log(user);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -20,7 +20,6 @@ const ReviewModal = ({ isOpen, onClose, parcel, user }) => {
       deliveryManId: parcel.deliveryManId,
       parcelId: parcel._id,
     };
-    console.log(review);
 
     setLoading(true);
 
