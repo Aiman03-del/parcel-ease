@@ -1,36 +1,37 @@
-import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import ReviewModal from "../../../components/ReviewModal"; // Import the ReviewModal component
+import ReviewModal from "../../../components/ReviewModal";
 import useAuth from "../../../hooks/useAuth";
 
 const MyParcels = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [parcels, setParcels] = useState([]);
-  const [filter, setFilter] = useState("all");
   const [selectedParcel, setSelectedParcel] = useState(null);
+  const [filter, setFilter] = useState("all");
 
-  // Fetch parcels for the logged-in user
-  useEffect(() => {
-    const fetchParcels = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:9000/my-parcels?email=${user.email}`,
-          {
-            credentials: "include",
-          }
-        );
-        const data = await response.json();
-        setParcels(data);
-      } catch (error) {
-        toast.error("Failed to load parcels", error);
-      }
-    };
-    if (user?.email) fetchParcels();
-  }, [user]);
+  const {
+    data: parcels,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["myParcels", user?.email],
+    queryFn: async () => {
+      const response = await fetch(
+        `http://localhost:9000/my-parcels?email=${user.email}`,
+        { credentials: "include" }
+      );
+      const data = await response.json();
+      return data;
+    },
+    enabled: !!user?.email,
+  });
 
-  // Handle cancel parcel
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading parcels</div>;
+
   const handleCancel = async (id) => {
     const confirmCancel = window.confirm(
       "Are you sure you want to cancel this parcel?"
@@ -40,58 +41,52 @@ const MyParcels = () => {
     try {
       const response = await fetch(
         `http://localhost:9000/cancel-parcel/${id}`,
-        {
-          method: "PATCH",
-          credentials: "include",
-        }
+        { method: "PATCH", credentials: "include" }
       );
       const data = await response.json();
 
       if (data.success) {
         toast.success("Parcel canceled successfully!");
-        setParcels((prev) =>
-          prev.map((parcel) =>
-            parcel._id === id ? { ...parcel, status: "canceled" } : parcel
-          )
-        );
       }
     } catch (error) {
       console.log(error);
+
       toast.error("Failed to cancel the parcel");
     }
   };
 
-  // Filter parcels by status
   const filteredParcels =
     filter === "all"
       ? parcels
-      : parcels.filter((parcel) => parcel.status === filter);
+      : parcels.filter(
+          (parcel) => parcel.status.toLowerCase() === filter.toLowerCase()
+        );
 
-  // Modal control
   const handleReviewClick = (parcel) => setSelectedParcel(parcel);
-
   const closeModal = () => setSelectedParcel(null);
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">My Parcels</h1>
-      <div className="mb-4">
-        <label htmlFor="filter" className="mr-2">
-          Filter by status:
-        </label>
-        <select
-          id="filter"
-          className="border px-2 py-1"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="on the way">On the Way</option>
-          <option value="delivered">Delivered</option>
-          <option value="returned">Returned</option>
-          <option value="canceled">Canceled</option>
-        </select>
+      <div className="mb-4 flex flex-wrap justify-between items-center">
+        <div>
+          <label htmlFor="filter" className="mr-2">
+            Filter by status:
+          </label>
+          <select
+            id="filter"
+            className="border px-2 py-1"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="Pending">Pending</option>
+            <option value="On the way">On the Way</option>
+            <option value="Delivered">Delivered</option>
+            <option value="returned">Returned</option>
+            <option value="Canceled">Canceled</option>
+          </select>
+        </div>
       </div>
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead>
@@ -117,7 +112,7 @@ const MyParcels = () => {
               <td className="border p-2">{parcel.deliveryManId || "-"}</td>
               <td className="border p-2 capitalize">{parcel.status}</td>
               <td className="border p-2 space-x-2">
-                <button
+                <Button
                   onClick={() =>
                     navigate(`/dashboard/update-parcel/${parcel._id}`)
                   }
@@ -125,31 +120,31 @@ const MyParcels = () => {
                   disabled={parcel.status !== "pending"}
                 >
                   Update
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => handleCancel(parcel._id)}
                   className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50"
                   disabled={parcel.status !== "pending"}
                 >
                   Cancel
-                </button>
+                </Button>
                 {parcel.status === "Delivered" && (
-                  <button
-                    onClick={() => handleReviewClick(parcel)} // Open Review Modal
+                  <Button
+                    onClick={() => handleReviewClick(parcel)}
                     className="px-3 py-1 bg-green-500 text-white rounded"
                   >
                     Review
-                  </button>
+                  </Button>
                 )}
                 {parcel.status === "pending" && (
-                  <button
+                  <Button
                     onClick={() =>
                       navigate(`/dashboard/pay-parcel/${parcel._id}`)
                     }
                     className="px-3 py-1 bg-yellow-500 text-white rounded"
                   >
                     Pay
-                  </button>
+                  </Button>
                 )}
               </td>
             </tr>
@@ -160,7 +155,6 @@ const MyParcels = () => {
         <p className="text-center text-gray-500 mt-4">No parcels found.</p>
       )}
 
-      {/* Review Modal */}
       <ReviewModal
         isOpen={!!selectedParcel}
         onClose={closeModal}
