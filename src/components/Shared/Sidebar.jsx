@@ -75,7 +75,7 @@ const Sidebar = () => {
           <Link
             key={item.name}
             to={item.path}
-            className="flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg transition-colors text-white text-lg"
+            className="flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg transition-colors text-white text-lg whitespace-nowrap"
           >
             <item.icon className="mr-3 text-xl" />
             <span>{item.name}</span>
