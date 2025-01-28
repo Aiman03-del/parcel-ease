@@ -1,91 +1,67 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
+import ApexCharts from "react-apexcharts";
+import { useBookingStats } from "../../../hooks/useBookingStats";
 
 const AdminStatistics = () => {
-  const [barChartData, setBarChartData] = useState({
-    series: [],
-    options: {},
-  });
-  const [lineChartData, setLineChartData] = useState({
-    series: [],
-    options: {},
-  });
+  const { data, error, isLoading } = useBookingStats();
 
-  useEffect(() => {
-    // Fetch data from the server
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:9000/stats/charts");
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
-        // Bar Chart: Bookings by Date
-        setBarChartData({
-          series: [
-            {
-              name: "Bookings",
-              data: data.bookingsByDate.map((item) => item.count),
-            },
-          ],
-          options: {
-            chart: { type: "bar" },
-            xaxis: {
-              categories: data.bookingsByDate.map((item) => item.date),
-            },
-            title: {
-              text: "Bookings by Date",
-              align: "center",
-            },
-          },
-        });
+  const barChartData = {
+    chart: {
+      type: "bar",
+      height: 350,
+    },
+    series: [
+      {
+        name: "Bookings",
+        data: data.bookingsByDate.map((item) => item.count),
+      },
+    ],
+    xaxis: {
+      categories: data.bookingsByDate.map((item) => item.date),
+    },
+  };
 
-        // Line Chart: Booked vs Delivered
-        setLineChartData({
-          series: [
-            {
-              name: "Booked Parcels",
-              data: data.bookedVsDelivered.map((item) => item.booked),
-            },
-            {
-              name: "Delivered Parcels",
-              data: data.bookedVsDelivered.map((item) => item.delivered),
-            },
-          ],
-          options: {
-            chart: { type: "line" },
-            xaxis: {
-              categories: data.bookedVsDelivered.map((item) => item.date),
-            },
-            title: {
-              text: "Booked vs Delivered Parcels",
-              align: "center",
-            },
-          },
-        });
-      } catch (error) {
-        console.error("Failed to fetch statistics:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const lineChartData = {
+    chart: {
+      type: "line",
+      height: 350,
+    },
+    series: [
+      {
+        name: "Booked",
+        data: data.bookedVsDelivered.map((item) => item.booked),
+      },
+      {
+        name: "Delivered",
+        data: data.bookedVsDelivered.map((item) => item.delivered),
+      },
+    ],
+    xaxis: {
+      categories: data.bookedVsDelivered.map((item) => item.date),
+    },
+  };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Statistics</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Bar Chart */}
-        <div className="shadow-lg rounded-lg p-4 bg-white">
-          <Chart
-            options={barChartData.options}
+    <div className="p-4 sm:p-6 lg:p-8">
+      <h2 className="text-2xl font-semibold mb-6">Admin Statistics</h2>
+      <div className="mb-8">
+        <h3 className="text-xl font-medium mb-4">Bookings by Date</h3>
+        <div className="w-full max-w-4xl mx-auto">
+          <ApexCharts
+            options={barChartData}
             series={barChartData.series}
             type="bar"
             height={350}
           />
         </div>
-        {/* Line Chart */}
-        <div className="shadow-lg rounded-lg p-4 bg-white">
-          <Chart
-            options={lineChartData.options}
+      </div>
+      <div>
+        <h3 className="text-xl font-medium mb-4">Booked vs Delivered</h3>
+        <div className="w-full max-w-4xl mx-auto">
+          <ApexCharts
+            options={lineChartData}
             series={lineChartData.series}
             type="line"
             height={350}
