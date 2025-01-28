@@ -1,40 +1,37 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 
+const fetchParcels = async () => {
+  const { data } = await axios.get("http://localhost:9000/parcels");
+  return data;
+};
+
+const fetchDeliveryMen = async () => {
+  const { data } = await axios.get("http://localhost:9000/deliverymen");
+  return data;
+};
+
 const AllParcels = () => {
-  const [parcels, setParcels] = useState([]);
-  const [deliveryMen, setDeliveryMen] = useState([]);
+  const queryClient = useQueryClient();
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  useEffect(() => {
-    fetchParcels();
-    fetchDeliveryMen();
-  }, []);
+  const {
+    data: parcels = [],
+    isLoading: parcelsLoading,
+    isError: parcelsError,
+  } = useQuery(["parcels"], fetchParcels);
 
-  const fetchParcels = async () => {
-    try {
-      const { data } = await axios.get("http://localhost:9000/parcels");
-      setParcels(data);
-    } catch (error) {
-      console.error("Failed to fetch parcels:", error);
-    }
-  };
-
-  const fetchDeliveryMen = async () => {
-    try {
-      const { data } = await axios.get("http://localhost:9000/deliverymen");
-      console.log(data);
-
-      setDeliveryMen(data);
-    } catch (error) {
-      console.error("Failed to fetch delivery men:", error);
-    }
-  };
+  const {
+    data: deliveryMen = [],
+    isLoading: deliveryMenLoading,
+    isError: deliveryMenError,
+  } = useQuery(["deliveryMen"], fetchDeliveryMen);
 
   const handleManageClick = (parcel) => {
     setSelectedParcel(parcel);
@@ -63,7 +60,7 @@ const AllParcels = () => {
 
       if (response.data.success) {
         alert("Parcel assigned successfully!");
-        fetchParcels();
+        queryClient.invalidateQueries(["parcels"]);
         closeModal();
       } else {
         alert("Failed to assign parcel.");
@@ -74,48 +71,60 @@ const AllParcels = () => {
     }
   };
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">All Parcels</h1>
-      <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-2">Name</th>
-            <th className="border p-2">Phone</th>
-            <th className="border p-2">Booking Date</th>
-            <th className="border p-2">Approximate Delivery Date</th>
-            <th className="border p-2">Cost</th>
-            <th className="border p-2">Status</th>
-            <th className="border p-2">Manage</th>
-          </tr>
-        </thead>
-        <tbody>
-          {parcels.map((parcel) => (
-            <tr key={parcel._id}>
-              <td className="border p-2">{parcel.name}</td>
-              <td className="border p-2">{parcel.phone}</td>
-              <td className="border p-2">
-                {moment(parcel.createdAt).format("YYYY-MM-DD")}
-              </td>
-              <td className="border p-2">{parcel.deliveryDate}</td>
-              <td className="border p-2">${parcel.price}</td>
-              <td className="border p-2">{parcel.status}</td>
-              <td className="border p-2">
-                <button
-                  className="bg-green-500 text-white px-4 py-2 rounded"
-                  onClick={() => handleManageClick(parcel)}
-                >
-                  Manage
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  if (parcelsLoading || deliveryMenLoading) {
+    return <div className="text-center">Loading...</div>;
+  }
 
-      {/* Modal */}
+  if (parcelsError || deliveryMenError) {
+    return (
+      <div className="text-center text-red-500">Failed to fetch data.</div>
+    );
+  }
+
+  return (
+    <div className="p-6 max-w-screen-lg mx-auto">
+      <h1 className="text-2xl font-bold mb-6 text-center">All Parcels</h1>
+      <div className="overflow-x-auto">
+        <table className="w-full table-auto border-collapse border border-gray-300 text-sm md:text-base">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border p-2">Name</th>
+              <th className="border p-2">Phone</th>
+              <th className="border p-2">Booking Date</th>
+              <th className="border p-2">Delivery Date</th>
+              <th className="border p-2">Cost</th>
+              <th className="border p-2">Status</th>
+              <th className="border p-2">Manage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {parcels.map((parcel) => (
+              <tr key={parcel._id} className="hover:bg-gray-100">
+                <td className="border p-2">{parcel.name}</td>
+                <td className="border p-2">{parcel.phone}</td>
+                <td className="border p-2">
+                  {moment(parcel.createdAt).format("YYYY-MM-DD")}
+                </td>
+                <td className="border p-2">{parcel.deliveryDate}</td>
+                <td className="border p-2">${parcel.price}</td>
+                <td className="border p-2">{parcel.status}</td>
+                <td className="border p-2">
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                    onClick={() => handleManageClick(parcel)}
+                  >
+                    Manage
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
-        <h2 className="text-xl font-bold mb-4">Assign Delivery Man</h2>
+        <h2 className="text-xl font-bold mb-4 text-center">
+          Assign Delivery Man
+        </h2>
         <form onSubmit={handleAssign}>
           <div className="mb-4">
             <label className="block font-medium mb-2">Delivery Man</label>
@@ -128,9 +137,7 @@ const AllParcels = () => {
             </select>
           </div>
           <div className="mb-4">
-            <label className="block font-medium mb-2">
-              Approximate Delivery Date
-            </label>
+            <label className="block font-medium mb-2">Delivery Date</label>
             <input
               type="date"
               name="deliveryDate"
@@ -140,14 +147,14 @@ const AllParcels = () => {
           <div className="flex justify-end gap-4">
             <button
               type="button"
-              className="bg-gray-500 text-white px-4 py-2 rounded"
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
               onClick={closeModal}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
               Assign
             </button>
