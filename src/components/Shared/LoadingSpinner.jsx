@@ -10,7 +10,7 @@ const LoadingSpinner = ({ smallHeight }) => {
       justify-center 
       items-center `}
     >
-      <PropagateLoader size={30} color="lime" />
+      <PropagateLoader size={30} color="skyBlue" />
     </div>
   );
 };

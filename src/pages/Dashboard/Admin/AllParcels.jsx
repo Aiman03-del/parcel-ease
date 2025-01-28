@@ -25,13 +25,19 @@ const AllParcels = () => {
     data: parcels = [],
     isLoading: parcelsLoading,
     isError: parcelsError,
-  } = useQuery(["parcels"], fetchParcels);
+  } = useQuery({
+    queryKey: ["parcels"],
+    queryFn: fetchParcels,
+  });
 
   const {
     data: deliveryMen = [],
     isLoading: deliveryMenLoading,
     isError: deliveryMenError,
-  } = useQuery(["deliveryMen"], fetchDeliveryMen);
+  } = useQuery({
+    queryKey: ["deliveryMen"],
+    queryFn: fetchDeliveryMen,
+  });
 
   const handleManageClick = (parcel) => {
     setSelectedParcel(parcel);
@@ -60,7 +66,7 @@ const AllParcels = () => {
 
       if (response.data.success) {
         alert("Parcel assigned successfully!");
-        queryClient.invalidateQueries(["parcels"]);
+        queryClient.invalidateQueries({ queryKey: ["parcels"] });
         closeModal();
       } else {
         alert("Failed to assign parcel.");
