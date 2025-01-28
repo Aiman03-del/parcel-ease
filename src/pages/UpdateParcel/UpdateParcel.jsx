@@ -1,13 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const UpdateParcel = () => {
-  const { _id } = useParams();
-
+  const { id } = useParams();
   const navigate = useNavigate();
-  const axiosSecure = useAxiosSecure();
+
   const [parcelData, setParcelData] = useState({
     parcelType: "",
     parcelWeight: "",
@@ -16,20 +15,27 @@ const UpdateParcel = () => {
     deliveryAddress: "",
     deliveryDate: "",
   });
-  console.log(parcelData);
 
   useEffect(() => {
     const fetchParcel = async () => {
       try {
-        const response = await axiosSecure.get(`/parcels/${_id}`);
+        const response = await axios.get(`http://localhost:9000/parcels/${id}`);
+        const fetchedParcelData = response.data || {};
 
-        setParcelData(response.data);
+        setParcelData({
+          parcelType: fetchedParcelData.parcelType || "",
+          parcelWeight: fetchedParcelData.parcelWeight || "",
+          receiverName: fetchedParcelData.receiverName || "",
+          receiverPhoneNumber: fetchedParcelData.phone || "",
+          deliveryAddress: fetchedParcelData.deliveryAddress || "",
+          deliveryDate: fetchedParcelData.deliveryDate || "",
+        });
       } catch (error) {
         console.error("Error fetching parcel data:", error);
       }
     };
     fetchParcel();
-  }, [_id, axiosSecure]);
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,43 +47,18 @@ const UpdateParcel = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // নিশ্চিত করুন যে স্ট্যাটাস "pending" থাকলে আপডেট হবে
-    if (parcelData.status !== "pending") {
-      alert("Parcel status is not 'pending', update is not allowed");
-      return;
-    }
-
-    const updatedParcel = { ...parcelData };
-
-    // Remove _id from the updated parcel data to prevent modification of immutable field
-    delete updatedParcel._id;
-
     try {
-      // প্যাচ রিকোয়েস্ট পাঠানো
-      const response = await axiosSecure.patch(
-        `/parcels/${_id}`,
-        updatedParcel
-      );
-
-      if (response.status === 200) {
-        alert("Parcel updated successfully!");
-        navigate("/dashboard/my-parcels");
-      }
+      await axios.put(`http://localhost:9000/parcels/${id}`, parcelData);
+      navigate(`/dashboard/my-parcels`);
     } catch (error) {
       console.error("Error updating parcel:", error);
-      alert(
-        `Failed to update parcel: ${
-          error.response?.data?.message || error.message
-        }`
-      );
     }
   };
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Update Parcel</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <div>
           <label className="block font-medium mb-1">Parcel Type</label>
           <input

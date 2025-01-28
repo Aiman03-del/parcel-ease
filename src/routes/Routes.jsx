@@ -15,6 +15,7 @@ import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
+import UpdateParcel from "../pages/UpdateParcel/UpdateParcel";
 import AdminRoute from "./AdminRoute";
 import DeliveryMenRoute from "./DeliveryMenRoute";
 import PrivateRoute from "./PrivateRoute";
@@ -67,6 +68,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyProfile />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/update-parcel/:id",
+        element: (
+          <PrivateRoute>
+            <UpdateParcel />
           </PrivateRoute>
         ),
       },
