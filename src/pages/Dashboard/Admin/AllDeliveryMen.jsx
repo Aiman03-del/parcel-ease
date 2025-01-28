@@ -1,28 +1,35 @@
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const AllDeliveryMen = () => {
-  const [deliveryMen, setDeliveryMen] = useState([]);
-
-  useEffect(() => {
-    fetchDeliveryMen();
-  }, []);
-
   const fetchDeliveryMen = async () => {
-    try {
-      const { data } = await axios.get("http://localhost:9000/deliverymen");
-      setDeliveryMen(data);
-    } catch (error) {
-      console.error("Error fetching delivery men:", error);
-    }
+    const { data } = await axios.get("http://localhost:9000/deliverymen");
+    return data;
   };
-  console.log(deliveryMen);
+
+  const {
+    data: deliveryMen,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["deliveryMen"],
+    queryFn: fetchDeliveryMen,
+  });
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">All Delivery Men</h1>
 
-      {/* Delivery Men Table */}
       <table className="w-full table-auto border-collapse border border-gray-300 mb-4">
         <thead>
           <tr className="bg-gray-200">
