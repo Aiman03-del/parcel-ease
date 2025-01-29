@@ -41,7 +41,7 @@ const BookParcel = () => {
   } = useQuery({
     queryKey: ["locations"],
     queryFn: async () => {
-      const response = await axios.get("/api/locations");
+      const response = await axios.get("/locations");
       return response.data;
     },
   });
