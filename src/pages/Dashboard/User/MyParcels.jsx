@@ -6,15 +6,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ReviewModal from "../../../components/ReviewModal";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const MyParcels = () => {
   const { user } = useAuth();
@@ -22,22 +22,28 @@ const MyParcels = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [filter, setFilter] = useState("all");
 
-  const {
-    data: parcels = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["myParcels", user?.email],
-    queryFn: async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/my-parcels?email=${user.email}`,
-        { credentials: "include" }
-      );
-      const data = await response.json();
-      return data;
-    },
-    enabled: !!user?.email,
-  });
+  const axios = useAxiosPublic();
+
+  const [parcels, setParcels] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!user?.email) return;
+
+    const fetchParcels = async () => {
+      try {
+        const response = await axios.get(`/my-parcels?email=${user.email}`);
+        setParcels(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchParcels();
+  }, [user?.email, axios]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading parcels</div>;
@@ -56,18 +62,14 @@ const MyParcels = () => {
     if (!result.isConfirmed) return;
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/cancel-parcel/${id}`,
-        { method: "PATCH", credentials: "include" }
-      );
-      const data = await response.json();
+      const response = await axios.patch(`/cancel-parcel/${id}`);
+      const data = response.data;
 
       if (data.success) {
         toast.success("Parcel canceled successfully!");
       }
     } catch (error) {
       console.log(error);
-
       toast.error("Failed to cancel the parcel");
     }
   };

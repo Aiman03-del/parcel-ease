@@ -1,22 +1,28 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const TopDeliveryMen = () => {
   const [deliveryMen, setDeliveryMen] = useState([]);
+  const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/top-deliverymen`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.deliveryMen)) {
-          setDeliveryMen(data.deliveryMen);
+    const fetchTopDeliveryMen = async () => {
+      try {
+        const response = await axiosPublic.get("/top-deliverymen");
+        if (response.data.success && Array.isArray(response.data.deliveryMen)) {
+          setDeliveryMen(response.data.deliveryMen);
         } else {
           setDeliveryMen([]);
         }
-      })
-      .catch((err) => console.error("Error fetching top delivery men:", err));
-  }, []);
+      } catch (error) {
+        console.error("Error fetching top delivery men:", error);
+      }
+    };
+
+    fetchTopDeliveryMen();
+  }, [axiosPublic]);
 
   return (
     <section className="py-16 bg-gray-50">

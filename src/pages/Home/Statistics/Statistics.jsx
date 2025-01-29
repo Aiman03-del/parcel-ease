@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import CountUp from "react-countup";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import StatisticsCard from "./StatisticsCard";
+
 const Statistics = () => {
   const [stats, setStats] = useState({
     parcelsBooked: 0,
@@ -9,12 +11,20 @@ const Statistics = () => {
     totalUsers: 0,
   });
 
+  const axiosPublic = useAxiosPublic();
+
   useEffect(() => {
-    fetch("http://localhost:9000/stats")
-      .then((res) => res.json())
-      .then((data) => setStats(data))
-      .catch((err) => console.error(err));
-  }, []);
+    const fetchStats = async () => {
+      try {
+        const response = await axiosPublic.get("/stats");
+        setStats(response.data);
+      } catch (error) {
+        console.error("Error fetching statistics:", error);
+      }
+    };
+
+    fetchStats();
+  }, [axiosPublic]);
 
   return (
     <section className="statistics-section py-16 bg-gray-50">

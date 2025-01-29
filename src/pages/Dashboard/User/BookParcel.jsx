@@ -13,10 +13,12 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const BookParcel = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
   const [formData, setFormData] = useState({
     phone: "",
@@ -31,6 +33,7 @@ const BookParcel = () => {
   });
 
   const [price, setPrice] = useState(50);
+
   const {
     data: locationData,
     error,
@@ -52,13 +55,7 @@ const BookParcel = () => {
 
     if (name === "parcelWeight") {
       const weight = parseFloat(value);
-      if (weight === 1) {
-        setPrice(50);
-      } else if (weight === 2) {
-        setPrice(100);
-      } else if (weight > 2) {
-        setPrice(150);
-      }
+      setPrice(weight === 1 ? 50 : weight === 2 ? 100 : 150);
     }
   };
 
@@ -67,7 +64,6 @@ const BookParcel = () => {
     const {
       phone,
       parcelType,
-      parcelWeight,
       receiverName,
       receiverPhone,
       deliveryAddress,
@@ -96,14 +92,14 @@ const BookParcel = () => {
     }
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/bookParcel`,
+      await axiosPublic.post(
+        "/bookParcel",
         {
           email: user.email,
           name: user.displayName,
           phone,
           parcelType,
-          parcelWeight,
+          parcelWeight: formData.parcelWeight,
           price,
           receiverName,
           receiverPhone,
@@ -117,10 +113,9 @@ const BookParcel = () => {
       );
 
       toast.success("Parcel booked successfully!");
-      navigate("/dashboard");
+      navigate("/dashboard/my-parcels");
     } catch (err) {
       console.log(err);
-
       Swal.fire({
         icon: "error",
         title: "Failed to book parcel",
@@ -140,7 +135,7 @@ const BookParcel = () => {
       transition={{ duration: 0.5 }}
     >
       <Helmet>
-        <title> ParcelEase | Book Parcel</title>
+        <title>ParcelEase | Book Parcel</title>
       </Helmet>
       <Card className="w-full p-6">
         <CardContent>

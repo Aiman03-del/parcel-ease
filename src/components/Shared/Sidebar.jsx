@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
 import { useContext } from "react";
 import {
+  FaBars,
   FaBox,
   FaChartBar,
   FaHome,
@@ -12,11 +14,9 @@ import {
 import { Link } from "react-router-dom";
 import { UserContext } from "../../providers/UserProvider";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { userData } = useContext(UserContext);
-
-  const userType = userData?.role;
-  console.log("User Role:", userType);
+  const userRole = userData?.role;
 
   const menuItems = {
     User: [
@@ -44,45 +44,57 @@ const Sidebar = () => {
     ],
   };
 
-  // Normalize userType to handle case insensitivity
-  const normalizedUserType = Object.keys(menuItems).find(
-    (key) => key.toLowerCase() === userType?.toLowerCase()
+  const normalizedUserRole = Object.keys(menuItems).find(
+    (key) => key.toLowerCase() === userRole?.toLowerCase()
   );
 
-  const menu = menuItems[normalizedUserType] || menuItems["User"];
+  const menu = menuItems[normalizedUserRole] || menuItems["User"];
 
   return (
-    <motion.div
-      initial={{ x: -250 }}
-      animate={{ x: 0 }}
-      transition={{ type: "spring", stiffness: 100 }}
-      className="w-64 bg-slate-800 shadow-md min-h-screen flex flex-col"
-    >
-      {/* Home Button */}
-      <div className="p-6 text-lg font-bold">
-        <Link
-          to="/"
-          className="flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg text-white transition-colors"
+    <>
+      {/* Mobile Toggle Button */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <button
+          onClick={toggleSidebar}
+          className=" p-2 bg-slate-800 text-white rounded-lg"
         >
-          <FaHome className="mr-3 text-xl " />
-          Home
-        </Link>
+          <FaBars />
+        </button>
       </div>
 
-      {/* Sidebar Menu */}
-      <div className="space-y-4 px-6 py-4 flex flex-col">
-        {menu.map((item) => (
+      {/* Sidebar */}
+      <motion.div
+        initial={{ x: -250 }}
+        animate={{ x: isOpen ? 0 : -250 }}
+        transition={{ type: "spring", stiffness: 100 }}
+        className={`w-64 bg-slate-800 shadow-md h-full  flex flex-col md:static fixed top-0 left-0 z-40`}
+      >
+        {/* Home Button */}
+        <div className="p-6 text-lg font-bold">
           <Link
-            key={item.name}
-            to={item.path}
-            className="flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg transition-colors text-white text-lg whitespace-nowrap"
+            to="/"
+            className="flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg text-white transition-colors"
           >
-            <item.icon className="mr-3 text-xl" />
-            <span>{item.name}</span>
+            <FaHome className="mr-3 text-xl " />
+            Home
           </Link>
-        ))}
-      </div>
-    </motion.div>
+        </div>
+
+        {/* Sidebar Menu */}
+        <div className="space-y-4 px-6 py-4 flex flex-col">
+          {menu.map((item) => (
+            <Link
+              key={item.name}
+              to={item.path}
+              className="flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg transition-colors text-white text-lg whitespace-nowrap"
+            >
+              <item.icon className="mr-3 text-xl" />
+              <span>{item.name}</span>
+            </Link>
+          ))}
+        </div>
+      </motion.div>
+    </>
   );
 };
 
