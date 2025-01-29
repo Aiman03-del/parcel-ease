@@ -1,8 +1,18 @@
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import ReviewModal from "../../../components/ReviewModal";
 import useAuth from "../../../hooks/useAuth";
 
@@ -20,11 +30,10 @@ const MyParcels = () => {
     queryKey: ["myParcels", user?.email],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:9000/my-parcels?email=${user.email}`,
+        `${import.meta.env.VITE_API_URL}/my-parcels?email=${user.email}`,
         { credentials: "include" }
       );
       const data = await response.json();
-
       return data;
     },
     enabled: !!user?.email,
@@ -34,14 +43,21 @@ const MyParcels = () => {
   if (error) return <div>Error loading parcels</div>;
 
   const handleCancel = async (id) => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this parcel?"
-    );
-    if (!confirmCancel) return;
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to cancel this parcel?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, cancel it!",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const response = await fetch(
-        `import.meta.env.VITE_API_URL/cancel-parcel/${id}`,
+        `${import.meta.env.VITE_API_URL}/cancel-parcel/${id}`,
         { method: "PATCH", credentials: "include" }
       );
       const data = await response.json();
@@ -68,41 +84,49 @@ const MyParcels = () => {
 
   return (
     <div className="p-4">
+      <Helmet>
+        <title> ParcelEase | My Parcels</title>
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4">My Parcels</h1>
       <div className="mb-4 flex flex-wrap justify-between items-center">
         <div>
           <label htmlFor="filter" className="mr-2">
             Filter by status:
           </label>
-          <select
-            id="filter"
-            className="border px-2 py-1"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <option value="all">All</option>
-            <option value="Pending">Pending</option>
-            <option value="On the way">On the Way</option>
-            <option value="Delivered">Delivered</option>
-            <option value="returned">Returned</option>
-            <option value="Canceled">Canceled</option>
-          </select>
+          <Select value={filter} onValueChange={(value) => setFilter(value)}>
+            <SelectTrigger className="border px-2 py-1">
+              <SelectValue placeholder="Select a status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="Pending">Pending</SelectItem>
+              <SelectItem value="On the way">On the Way</SelectItem>
+              <SelectItem value="Delivered">Delivered</SelectItem>
+              <SelectItem value="Returned">Returned</SelectItem>
+              <SelectItem value="Canceled">Canceled</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
-      <table className="w-full table-auto border-collapse border border-gray-300">
+      <motion.table
+        className="w-full table-auto border-collapse border border-gray-300"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <thead>
           <tr className="bg-gray-200">
             <th className="border p-2">Parcel Type</th>
             <th className="border p-2">Requested Delivery Date</th>
             <th className="border p-2">Approx. Delivery Date</th>
             <th className="border p-2">Booking Date</th>
-            <th className="border p-2">Delivery Men ID</th>
+            <th className="border p-2">Delivery Man ID</th>
             <th className="border p-2">Status</th>
             <th className="border p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filteredParcels?.map((parcel) => (
+          {filteredParcels.map((parcel) => (
             <tr key={parcel._id} className="text-center">
               <td className="border p-2">{parcel.parcelType}</td>
               <td className="border p-2">{parcel.deliveryDate}</td>
@@ -151,8 +175,8 @@ const MyParcels = () => {
             </tr>
           ))}
         </tbody>
-      </table>
-      {filteredParcels?.length === 0 && (
+      </motion.table>
+      {filteredParcels.length === 0 && (
         <p className="text-center text-gray-500 mt-4">No parcels found.</p>
       )}
 

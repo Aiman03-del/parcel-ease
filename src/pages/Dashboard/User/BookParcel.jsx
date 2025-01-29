@@ -8,8 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
 
 const BookParcel = () => {
@@ -118,7 +120,12 @@ const BookParcel = () => {
       navigate("/dashboard");
     } catch (err) {
       console.log(err);
-      toast.error("Failed to book parcel. Please try again.");
+
+      Swal.fire({
+        icon: "error",
+        title: "Failed to book parcel",
+        text: "Please try again.",
+      });
     }
   };
 
@@ -132,6 +139,9 @@ const BookParcel = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      <Helmet>
+        <title> ParcelEase | Book Parcel</title>
+      </Helmet>
       <Card className="w-full p-6">
         <CardContent>
           <motion.div

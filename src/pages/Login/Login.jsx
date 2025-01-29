@@ -1,3 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
+import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { TbFidgetSpinner } from "react-icons/tb";
@@ -11,13 +14,9 @@ const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-  // If user is already logged in, redirect them to the previous or home page
   if (user) return <Navigate to={from} replace={true} />;
-
-  // Show loading spinner if authentication is in progress
   if (loading) return <LoadingSpinner />;
 
-  // Form submit handler for login
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.target;
@@ -25,117 +24,114 @@ const Login = () => {
     const password = form.password.value;
 
     try {
-      // Attempt user login with provided credentials
       await signIn(email, password);
       navigate(from, { replace: true });
       toast.success("Login Successful");
     } catch (err) {
-      console.log(err);
       toast.error(err?.message || "Login Failed");
     }
   };
 
-  // Handle Google Sign-In
   const handleGoogleSignIn = async () => {
     try {
-      // Google authentication for user login
       await signInWithGoogle();
       navigate(from, { replace: true });
       toast.success("Login Successful");
     } catch (err) {
-      console.log(err);
       toast.error(err?.message || "Google Sign-In Failed");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white">
-      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
-        <div className="mb-8 text-center">
-          <h1 className="my-3 text-4xl font-bold">Log In</h1>
-          <p className="text-sm text-gray-400">
-            Sign in to access your account
-          </p>
+    <motion.div
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600"
+    >
+      <Helmet>
+        <title> ParcelEase | Login</title>
+      </Helmet>
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="flex flex-col max-w-md p-8 rounded-lg shadow-lg bg-white text-gray-900"
+      >
+        <div className="mb-6 text-center">
+          <h1 className="text-4xl font-extrabold text-indigo-600">Log In</h1>
+          <p className="text-gray-500">Sign in to access your account</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block mb-2 text-sm">
-                Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                required
-                placeholder="Enter Your Email Here"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
-              />
-            </div>
-            <div>
-              <div className="flex justify-between">
-                <label htmlFor="password" className="text-sm mb-2">
-                  Password
-                </label>
-              </div>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                required
-                placeholder="*******"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
-              />
-            </div>
-          </div>
-
           <div>
-            <button
-              type="submit"
-              className="bg-lime-500 w-full rounded-md py-3 text-white"
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
             >
-              {loading ? (
-                <TbFidgetSpinner className="animate-spin m-auto" />
-              ) : (
-                "Continue"
-              )}
-            </button>
+              Email address
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              required
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            />
           </div>
-        </form>
-
-        <div className="space-y-1">
-          <button className="text-xs hover:underline hover:text-lime-500 text-gray-400">
-            Forgot password?
-          </button>
-        </div>
-
-        <div className="flex items-center pt-4 space-x-1">
-          <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
-          <p className="px-3 text-sm dark:text-gray-400">
-            Login with social accounts
-          </p>
-          <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
-        </div>
-
-        <div
-          onClick={handleGoogleSignIn}
-          className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
-        >
-          <FcGoogle size={32} />
-          <p>Continue with Google</p>
-        </div>
-
-        <p className="px-6 text-sm text-center text-gray-400">
-          Don&apos;t have an account yet?{" "}
-          <Link
-            to="/signup"
-            className="hover:underline hover:text-lime-500 text-gray-600"
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              required
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            />
+          </div>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            className="w-full py-3 rounded-md bg-indigo-500 text-white font-bold"
           >
+            {loading ? (
+              <TbFidgetSpinner className="animate-spin m-auto" />
+            ) : (
+              "Sign In"
+            )}
+          </motion.button>
+        </form>
+        <button className="mt-3 text-sm text-indigo-500 hover:underline">
+          Forgot password?
+        </button>
+        <div className="flex items-center my-4">
+          <div className="flex-1 h-px bg-gray-300"></div>
+          <p className="px-3 text-sm text-gray-500">Or sign in with</p>
+          <div className="flex-1 h-px bg-gray-300"></div>
+        </div>
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleGoogleSignIn}
+          className="flex items-center justify-center p-2 border border-gray-300 rounded-md cursor-pointer"
+        >
+          <FcGoogle size={28} />
+          <p className="ml-3">Continue with Google</p>
+        </motion.div>
+        <p className="mt-4 text-center text-sm text-gray-500">
+          Don't have an account?
+          <Link to="/signup" className="text-indigo-500 hover:underline">
+            {" "}
             Sign up
           </Link>
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

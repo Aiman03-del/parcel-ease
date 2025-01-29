@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 
 const ErrorPage = () => {
@@ -5,6 +6,9 @@ const ErrorPage = () => {
 
   return (
     <section className="bg-white ">
+      <Helmet>
+        <title> ParcelEase | Not Found</title>
+      </Helmet>
       <div className="container flex items-center min-h-screen px-6 py-12 mx-auto">
         <div className="flex flex-col items-center max-w-sm mx-auto text-center">
           <p className="p-3 text-sm font-medium text-lime-500 rounded-full bg-blue-50 ">

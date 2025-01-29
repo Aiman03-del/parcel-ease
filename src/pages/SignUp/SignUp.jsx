@@ -1,4 +1,6 @@
 import axios from "axios";
+import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { TbFidgetSpinner } from "react-icons/tb";
@@ -27,16 +29,9 @@ const SignUp = () => {
     }
 
     try {
-      // 1. Upload image to imgbb
       const photoURL = await imageUpload(image);
-
-      // 2. User Registration
       const result = await createUser(email, password);
-
-      // 3. Update username & profile photo
       await updateUserProfile(name, photoURL);
-
-      // 4. Save user info in DB if the user is new
       await saveUser({
         uid: result?.user.uid,
         displayName: name,
@@ -44,13 +39,10 @@ const SignUp = () => {
         photoURL,
         phone,
       });
-
       navigate("/");
       toast.success("Signup Successful");
     } catch (error) {
       console.error("Error during sign-up:", error.message);
-
-      // Handle email already in use
       if (error.code === "auth/email-already-in-use") {
         toast.error("This email is already registered. Please log in.");
       } else {
@@ -63,33 +55,24 @@ const SignUp = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithGoogle();
-
-      // Check if email is already in use
       const { data } = await axios.get(
         `${import.meta.env.VITE_API_URL}/users/${result?.user.email}`
       );
-
       if (data.exists) {
-        // If email exists, show an alert
         toast.error("This email is already registered. Please log in.");
         return;
       }
-
-      // If email is not registered, proceed with saving user
       await saveUser({
         uid: result?.user.uid,
         displayName: result?.user.displayName,
         email: result?.user.email,
         photoURL: result?.user.photoURL,
-        phone: "", // Google sign-in users might not have a phone number initially
+        phone: "",
       });
-
       navigate("/");
       toast.success("Signup Successful");
     } catch (error) {
       console.error("Google Sign-In Error:", error.message);
-
-      // Handle account exists with different credentials
       if (error.code === "auth/account-exists-with-different-credential") {
         toast.error(
           "This email is already registered with a different method. Please log in."
@@ -101,135 +84,92 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white">
-      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600"
+    >
+      <Helmet>
+        <title> ParcelEase | Sign In</title>
+      </Helmet>
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        className="flex flex-col max-w-md p-8 rounded-lg shadow-lg bg-white text-gray-900"
+      >
         <div className="mb-8 text-center">
-          <h1 className="my-3 text-4xl font-bold">Sign Up</h1>
-          <p className="text-sm text-gray-400">Welcome to PlantNet</p>
+          <h1 className="my-3 text-4xl font-bold text-purple-700">Sign Up</h1>
+          <p className="text-sm text-gray-500">Welcome to ParcelEase</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
-            {/* Name Input */}
-            <div>
-              <label htmlFor="name" className="block mb-2 text-sm">
-                Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Enter Your Name Here"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
-                required
-              />
-            </div>
-
-            {/* Phone Input */}
-            <div>
-              <label htmlFor="phone" className="block mb-2 text-sm">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                name="phone"
-                id="phone"
-                placeholder="Enter Your Phone Number Here"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
-                required
-              />
-            </div>
-
-            {/* Image Input */}
-            <div>
-              <label htmlFor="image" className="block mb-2 text-sm">
-                Select Image
-              </label>
-              <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-200 text-gray-900"
-                required
-              />
-            </div>
-
-            {/* Email Input */}
-            <div>
-              <label htmlFor="email" className="block mb-2 text-sm">
-                Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter Your Email Here"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
-                required
-              />
-            </div>
-
-            {/* Password Input */}
-            <div>
-              <label htmlFor="password" className="block mb-2 text-sm">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="*******"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
-                required
-              />
-            </div>
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              required
+            />
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone Number"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              required
+            />
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              required
+            />
           </div>
-
-          {/* Submit Button */}
-          <div>
-            <button
-              type="submit"
-              className="bg-lime-500 w-full rounded-md py-3 text-white"
-              disabled={loading}
-            >
-              {loading ? (
-                <TbFidgetSpinner className="animate-spin m-auto" />
-              ) : (
-                "Continue"
-              )}
-            </button>
-          </div>
-        </form>
-
-        {/* Social Signup */}
-        <div className="flex items-center pt-4 space-x-1">
-          <div className="flex-1 h-px sm:w-16 bg-gray-300"></div>
-          <p className="px-3 text-sm text-gray-400">
-            Signup with social accounts
-          </p>
-          <div className="flex-1 h-px sm:w-16 bg-gray-300"></div>
-        </div>
-        <div
-          onClick={handleGoogleSignIn}
-          className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 rounded cursor-pointer hover:bg-gray-200"
-        >
-          <FcGoogle size={32} />
-          <p>Continue with Google</p>
-        </div>
-
-        {/* Redirect to Login */}
-        <p className="px-6 text-sm text-center text-gray-400">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="hover:underline hover:text-lime-500 text-gray-600"
+          <button
+            type="submit"
+            className="w-full py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-all"
           >
+            {loading ? (
+              <TbFidgetSpinner className="animate-spin m-auto" />
+            ) : (
+              "Continue"
+            )}
+          </button>
+        </form>
+        <div className="text-center mt-4">
+          <p className="text-sm text-gray-500">Or sign up using</p>
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            onClick={handleGoogleSignIn}
+            className="flex justify-center items-center mt-2 p-2 border rounded-md cursor-pointer hover:bg-gray-200 transition-all"
+          >
+            <FcGoogle size={32} />
+            <p className="ml-2">Continue with Google</p>
+          </motion.div>
+        </div>
+        <p className="text-center mt-4 text-gray-500">
+          Already have an account?{" "}
+          <Link to="/login" className="text-purple-600 hover:underline">
             Login
           </Link>
-          .
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

@@ -19,7 +19,9 @@ const UpdateParcel = () => {
   useEffect(() => {
     const fetchParcel = async () => {
       try {
-        const response = await axios.get(`http://localhost:9000/parcels/${id}`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/parcels/${id}`
+        );
         const fetchedParcelData = response.data || {};
 
         setParcelData({
@@ -48,7 +50,10 @@ const UpdateParcel = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:9000/parcels/${id}`, parcelData);
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/parcels/${id}`,
+        parcelData
+      );
       navigate(`/dashboard/my-parcels`);
     } catch (error) {
       console.error("Error updating parcel:", error);

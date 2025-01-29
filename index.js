@@ -385,3 +385,22 @@ app.listen(port, () => {
 });
 
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.whalj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+app.get("/parcels/assigned/:deliveryManId", verifyToken, async (req, res) => {
+  const { deliveryManId } = req.params;
+
+  if (!deliveryManId) {
+    return res.status(400).send({ message: "Delivery man ID is required" });
+  }
+
+  try {
+    // Fetch parcels assigned to the delivery man with status not equal to "Delivered"
+    const parcels = await parcelsCollection
+      .find({ deliveryManId, status: { $ne: "Delivered" } })
+      .toArray();
+
+    // Return the fetched parcels
+    res.send(parcels);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching assigned parcels", error });
+  }
+});

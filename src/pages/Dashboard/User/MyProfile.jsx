@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { FaCamera, FaSyncAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { imageUpload } from "../../../API/Utils";
@@ -46,6 +47,9 @@ const MyProfile = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      <Helmet>
+        <title> ParcelEase | My Profile</title>
+      </Helmet>
       <div className="card w-full max-w-md p-6 shadow-md border rounded-lg">
         <motion.div
           className="flex flex-col items-center gap-4"

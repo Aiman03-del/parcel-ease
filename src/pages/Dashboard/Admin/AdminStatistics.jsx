@@ -1,4 +1,5 @@
 import ApexCharts from "react-apexcharts";
+import { Helmet } from "react-helmet-async";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import { useBookingStats } from "../../../hooks/useBookingStats";
 
@@ -46,6 +47,9 @@ const AdminStatistics = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
+      <Helmet>
+        <title> ParcelEase | Statistics</title>
+      </Helmet>
       <h2 className="text-2xl font-semibold mb-6">Admin Statistics</h2>
       <div className="mb-8">
         <h3 className="text-xl font-medium mb-4">Bookings by Date</h3>

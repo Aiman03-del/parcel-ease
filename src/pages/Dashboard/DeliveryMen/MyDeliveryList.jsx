@@ -1,9 +1,20 @@
 /* eslint-disable no-unused-vars */
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { motion } from "framer-motion";
 import moment from "moment";
 import { useContext, useState } from "react";
-import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
+import { Helmet } from "react-helmet-async";
+import Swal from "sweetalert2";
 import { UserContext } from "../../../providers/UserProvider";
 
 const MyDeliveryList = () => {
@@ -12,13 +23,15 @@ const MyDeliveryList = () => {
   const loggedInDeliveryManId = userData?._id;
   const [totalDelivered, setTotalDelivered] = useState(0);
 
-  // Fetch parcels using TanStack Query
   const { data: parcels = [], isLoading } = useQuery({
     queryKey: ["parcels", loggedInDeliveryManId],
     queryFn: async () => {
       if (!loggedInDeliveryManId) return [];
       const res = await axios.get(
-        `http://localhost:9000/parcels?deliveryManId=${loggedInDeliveryManId}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/parcels?deliveryManId=${loggedInDeliveryManId}`,
+        { withCredentials: true }
       );
       setTotalDelivered(
         res.data.filter((parcel) => parcel.status === "Delivered").length
@@ -28,10 +41,9 @@ const MyDeliveryList = () => {
     enabled: !!loggedInDeliveryManId,
   });
 
-  // Mutation to update parcel status
   const updateParcelMutation = useMutation({
     mutationFn: async ({ parcelId, status }) => {
-      await axios.patch(`import.meta.env.VITE_API_URL/parcels/${parcelId}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/parcels/${parcelId}`, {
         status,
       });
     },
@@ -40,109 +52,126 @@ const MyDeliveryList = () => {
     },
   });
 
-  // Handle Cancel button
   const handleCancel = async (parcelId) => {
-    if (window.confirm("Are you sure you want to cancel this parcel?")) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to cancel this parcel?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, cancel it!",
+    });
+
+    if (result.isConfirmed) {
       updateParcelMutation.mutate({ parcelId, status: "Cancelled" });
+      Swal.fire("Cancelled!", "The parcel has been cancelled.", "success");
     }
   };
 
-  // Handle Deliver button
   const handleDeliver = async (parcelId) => {
-    if (
-      window.confirm("Are you sure you want to mark this parcel as Delivered?")
-    ) {
+    const result = await Swal.fire({
+      title: "Confirm Delivery",
+      text: "Are you sure you want to mark this parcel as Delivered?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, deliver it!",
+    });
+
+    if (result.isConfirmed) {
       updateParcelMutation.mutate({ parcelId, status: "Delivered" });
+      Swal.fire(
+        "Delivered!",
+        "The parcel has been marked as delivered.",
+        "success"
+      );
     }
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <motion.div
+      className="p-4 sm:p-6 lg:p-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Helmet>
+        <title> ParcelEase | My Delivery List</title>
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4 text-center sm:text-left">
         My Delivery List
       </h1>
-
       {isLoading ? (
-        <LoadingSpinner />
+        <p>Loading...</p>
       ) : parcels.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200 text-sm sm:text-base">
-                <th className="border p-2">Booked User</th>
-                <th className="border p-2">Receiver</th>
-                <th className="border p-2">Booked Phone</th>
-                <th className="border p-2">Requested Date</th>
-                <th className="border p-2">Delivery Date</th>
-                <th className="border p-2">Receiver Phone</th>
-                <th className="border p-2">Address</th>
-                <th className="border p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {parcels.map((parcel) => (
-                <tr key={parcel._id} className="text-sm sm:text-base">
-                  <td className="border p-2">{parcel.name}</td>
-                  <td className="border p-2">{parcel.receiverName}</td>
-                  <td className="border p-2">{parcel.phone}</td>
-                  <td className="border p-2">
-                    {moment(parcel.createdAt).format("YYYY-MM-DD")}
-                  </td>
-                  <td className="border p-2">{parcel.deliveryDate}</td>
-                  <td className="border p-2">{parcel.receiverPhone}</td>
-                  <td className="border p-2">{parcel.deliveryAddress}</td>
-                  <td className="border p-2 flex flex-col sm:flex-row gap-2">
-                    <button
-                      className="bg-blue-500 text-white px-3 py-1 rounded text-xs sm:text-sm"
-                      onClick={() =>
-                        window.open(
-                          `https://maps.google.com/?q=${parcel.receiverAddress}`,
-                          "_blank"
-                        )
-                      }
-                    >
-                      View Location
-                    </button>
-                    <button
-                      className={`px-3 py-1 rounded text-xs sm:text-sm ${
-                        parcel.status === "Cancelled" ||
-                        parcel.status === "Delivered"
-                          ? "bg-gray-500 text-gray-200 cursor-not-allowed"
-                          : "bg-red-500 text-white"
-                      }`}
-                      onClick={() => handleCancel(parcel._id)}
-                      disabled={
-                        parcel.status === "Cancelled" ||
-                        parcel.status === "Delivered"
-                      }
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className={`px-3 py-1 rounded text-xs sm:text-sm ${
-                        parcel.status === "Cancelled" ||
-                        parcel.status === "Delivered"
-                          ? "bg-gray-500 text-gray-200 cursor-not-allowed"
-                          : "bg-green-500 text-white"
-                      }`}
-                      onClick={() => handleDeliver(parcel._id)}
-                      disabled={
-                        parcel.status === "Cancelled" ||
-                        parcel.status === "Delivered"
-                      }
-                    >
-                      Deliver
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Booked User</TableHead>
+              <TableHead>Receiver</TableHead>
+              <TableHead>Booked Phone</TableHead>
+              <TableHead>Requested Date</TableHead>
+              <TableHead>Delivery Date</TableHead>
+              <TableHead>Receiver Phone</TableHead>
+              <TableHead>Address</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {parcels.map((parcel) => (
+              <TableRow key={parcel._id}>
+                <TableCell>{parcel.name}</TableCell>
+                <TableCell>{parcel.receiverName}</TableCell>
+                <TableCell>{parcel.phone}</TableCell>
+                <TableCell>
+                  {moment(parcel.createdAt).format("YYYY-MM-DD")}
+                </TableCell>
+                <TableCell>{parcel.deliveryDate}</TableCell>
+                <TableCell>{parcel.receiverPhone}</TableCell>
+                <TableCell>{parcel.deliveryAddress}</TableCell>
+                <TableCell className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      window.open(
+                        `https://maps.google.com/?q=${parcel.receiverAddress}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    View Location
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => handleCancel(parcel._id)}
+                    disabled={
+                      parcel.status === "Cancelled" ||
+                      parcel.status === "Delivered"
+                    }
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="success"
+                    onClick={() => handleDeliver(parcel._id)}
+                    disabled={
+                      parcel.status === "Cancelled" ||
+                      parcel.status === "Delivered"
+                    }
+                  >
+                    Deliver
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       ) : (
         <p className="text-center">No parcels assigned to you.</p>
       )}
-    </div>
+    </motion.div>
   );
 };
 
