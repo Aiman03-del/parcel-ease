@@ -1,32 +1,45 @@
 import axios from "axios";
-// Upload image and return image url
 
 export const imageUpload = async (imageData) => {
-  const formData = new FormData();
-  formData.append("image", imageData);
-  const { data } = await axios.post(
-    `https://api.imgbb.com/1/upload?expiration=600&key=${
-      import.meta.env.VITE_IMGBB_API_KEY
-    }`,
-    formData
-  );
-  return data.data.display_url;
+  try {
+    const formData = new FormData();
+    formData.append("image", imageData);
+
+    const { data } = await axios.post(
+      `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_IMGBB_API_KEY
+      }`,
+      formData
+    );
+
+    if (!data.success) throw new Error("Image upload failed");
+    return data.data.display_url;
+  } catch (error) {
+    console.error("Image Upload Error:", error);
+    throw new Error("Failed to upload image");
+  }
 };
 
-export const saveUser = async (user) => {
+export const saveUser = async (userData) => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/users/${user?.email}`,
+      "https://server-sigma-plum.vercel.app/users",
       {
-        name: user?.displayName,
-        image: user?.photoURL,
-        email: user?.email,
-        phone: user?.phone || "",
+        uid: userData.uid,
+        name: userData.displayName,
+        email: userData.email,
+        image: userData.photoURL,
+        phone: userData.phone,
         role: "user",
       }
     );
-    console.log(response.data);
+    return response.data;
   } catch (error) {
-    console.error("Error saving user:", error.message);
+    if (error.response && error.response.status === 404) {
+      console.error("Save User Error: Endpoint not found (404)", error);
+      throw new Error("Failed to save user data: Endpoint not found (404)");
+    }
+    console.error("Save User Error:", error);
+    throw new Error("Failed to save user data");
   }
 };

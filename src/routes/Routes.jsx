@@ -11,6 +11,8 @@ import MyReviews from "../pages/Dashboard/DeliveryMen/MyReviews";
 import BookParcel from "../pages/Dashboard/User/BookParcel";
 import MyParcels from "../pages/Dashboard/User/MyParcels";
 import MyProfile from "../pages/Dashboard/User/MyProfile";
+import PayParcel from "../pages/Dashboard/User/PayParcel";
+import PaymentSuccess from "../pages/Dashboard/User/PaymentSuccess";
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
@@ -140,6 +142,18 @@ export const router = createBrowserRouter([
           </DeliveryMenRoute>
         ),
       },
+      {
+        path: "/dashboard/pay-parcel/:id",
+        element: (
+          <PrivateRoute>
+            <PayParcel />
+          </PrivateRoute>
+        ),
+      },
     ],
+  },
+  {
+    path: "/payment-success",
+    element: <PrivateRoute><PaymentSuccess /></PrivateRoute>,
   },
 ]);

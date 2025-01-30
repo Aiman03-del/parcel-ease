@@ -25,14 +25,17 @@ const ReviewModal = ({ isOpen, onClose, parcel, user }) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:9000/review", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(review),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://server-sigma-plum.vercel.app/review",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(review),
+          credentials: "include",
+        }
+      );
 
       const data = await response.json();
 

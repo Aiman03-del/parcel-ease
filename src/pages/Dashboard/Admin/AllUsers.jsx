@@ -100,7 +100,9 @@ const AllUsers = () => {
                   <tr key={user._id} className="hover:bg-gray-100">
                     <td className="border p-2">{user.name}</td>
                     <td className="border p-2">{user.phone || "N/A"}</td>
-                    <td className="border p-2">{user.parcelsBooked || 0}</td>
+                    <td className="border p-2">
+                      {user.totalParcelBooked || 0}
+                    </td>
                     <td className="border p-2">
                       ${user.totalSpent ? user.totalSpent.toFixed(2) : "0.00"}
                     </td>

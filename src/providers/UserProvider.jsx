@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { UserContext } from "../Context/UserContext";
 import useAuth from "../hooks/useAuth";
-
-// Create UserContext
-export const UserContext = createContext();
 
 // UserContext Provider Component
 const UserProvider = ({ children }) => {
@@ -22,7 +20,13 @@ const UserProvider = ({ children }) => {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
 
-          const data = await response.json();
+          const text = await response.text();
+
+          if (!text) {
+            throw new Error("Empty response from server");
+          }
+
+          const data = JSON.parse(text);
           setUserData(data || null);
         } catch (error) {
           console.error("Failed to fetch user data:", error.message);

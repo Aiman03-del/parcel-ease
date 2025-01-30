@@ -9,9 +9,12 @@ import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 const AllDeliveryMen = () => {
   const fetchDeliveryMen = async () => {
     try {
-      const { data } = await axios.get("http://localhost:9000/deliverymen", {
-        withCredentials: true,
-      });
+      const { data } = await axios.get(
+        "https://server-sigma-plum.vercel.app/deliverymen",
+        {
+          withCredentials: true,
+        }
+      );
       return data;
     } catch (error) {
       Swal.fire({

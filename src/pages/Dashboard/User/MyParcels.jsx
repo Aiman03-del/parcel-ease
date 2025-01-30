@@ -10,9 +10,12 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-hot-toast";
+import { FaEdit, FaMoneyBillWave, FaStar, FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 import Swal from "sweetalert2";
 import ReviewModal from "../../../components/ReviewModal";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
@@ -45,7 +48,7 @@ const MyParcels = () => {
     fetchParcels();
   }, [user?.email, axios]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error loading parcels</div>;
 
   const handleCancel = async (id) => {
@@ -72,6 +75,10 @@ const MyParcels = () => {
       console.log(error);
       toast.error("Failed to cancel the parcel");
     }
+  };
+
+  const handlePayClick = (parcel) => {
+    navigate(`/dashboard/pay-parcel/${parcel._id}`, { state: { parcel } });
   };
 
   const filteredParcels =
@@ -117,60 +124,93 @@ const MyParcels = () => {
         transition={{ duration: 0.5 }}
       >
         <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-2">Parcel Type</th>
-            <th className="border p-2">Requested Delivery Date</th>
-            <th className="border p-2">Approx. Delivery Date</th>
-            <th className="border p-2">Booking Date</th>
-            <th className="border p-2">Delivery Man ID</th>
-            <th className="border p-2">Status</th>
-            <th className="border p-2">Actions</th>
+          <tr className="bg-gray-200 text-sm">
+            <th className="border p-2 whitespace-nowrap">Parcel Type</th>
+            <th className="border p-2 whitespace-nowrap">
+              Requested Delivery Date
+            </th>
+            <th className="border p-2 whitespace-nowrap">
+              Approx. Delivery Date
+            </th>
+            <th className="border p-2 whitespace-nowrap">Booking Date</th>
+            <th className="border p-2 whitespace-nowrap">Delivery Man ID</th>
+            <th className="border p-2 whitespace-nowrap">Status</th>
+            <th className="border p-2 whitespace-nowrap">Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredParcels.map((parcel) => (
             <tr key={parcel._id} className="text-center">
-              <td className="border p-2">{parcel.parcelType}</td>
-              <td className="border p-2">{parcel.deliveryDate}</td>
-              <td className="border p-2">{parcel.deliveryDate || "-"}</td>
-              <td className="border p-2">
+              <td className="border p-2 whitespace-nowrap">
+                {parcel.parcelType}
+              </td>
+              <td className="border p-2 whitespace-nowrap">
+                {parcel.deliveryDate}
+              </td>
+              <td className="border p-2 whitespace-nowrap">
+                {parcel.deliveryDate || "-"}
+              </td>
+              <td className="border p-2 whitespace-nowrap">
                 {new Date(parcel.createdAt).toLocaleDateString()}
               </td>
-              <td className="border p-2">{parcel.deliveryManId || "-"}</td>
-              <td className="border p-2 capitalize">{parcel.status}</td>
-              <td className="border p-2 space-x-2">
+              <td className="border p-2 whitespace-nowrap">
+                {parcel.deliveryManId || "-"}
+              </td>
+              <td className="border p-2 whitespace-nowrap capitalize">
+                {parcel.status}
+              </td>
+              <td className="border p-2 whitespace-nowrap space-x-2 flex justify-center">
                 <Button
                   onClick={() =>
                     navigate(`/dashboard/update-parcel/${parcel._id}`)
                   }
                   className="px-3 py-1 bg-blue-500 text-white rounded disabled:opacity-50"
                   disabled={parcel.status !== "pending"}
+                  data-tooltip-id="update"
+                  data-tooltip-content="Update"
+                  data-tooltip-place="top"
                 >
-                  Update
+                  <FaEdit />
+                  <Tooltip id="update" place="top" type="dark" effect="solid" />
                 </Button>
                 <Button
                   onClick={() => handleCancel(parcel._id)}
                   className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50"
                   disabled={parcel.status !== "pending"}
+                  data-tooltip-id="cancel"
+                  data-tooltip-content="Cancel"
+                  data-tooltip-place="top"
                 >
-                  Cancel
+                  <FaTrashAlt />
+                  <Tooltip id="cancel" place="top" type="dark" effect="solid" />
                 </Button>
                 {parcel.status === "Delivered" && (
                   <Button
                     onClick={() => handleReviewClick(parcel)}
                     className="px-3 py-1 bg-green-500 text-white rounded"
+                    data-tooltip-content="Review"
+                    data-tooltip-id="review"
+                    data-tooltip-place="top"
                   >
-                    Review
+                    <FaStar />
+                    <Tooltip
+                      id="review"
+                      place="top"
+                      type="dark"
+                      effect="solid"
+                    />
                   </Button>
                 )}
                 {parcel.status === "pending" && (
                   <Button
-                    onClick={() =>
-                      navigate(`/dashboard/pay-parcel/${parcel._id}`)
-                    }
+                    onClick={() => handlePayClick(parcel)}
                     className="px-3 py-1 bg-yellow-500 text-white rounded"
+                    data-tooltip-id="pay"
+                    data-tooltip-content="Pay"
+                    data-tooltip-place="top"
                   >
-                    Pay
+                    <FaMoneyBillWave />
+                    <Tooltip id="pay" place="top" type="dark" effect="solid" />
                   </Button>
                 )}
               </td>

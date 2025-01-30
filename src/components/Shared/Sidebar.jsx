@@ -12,7 +12,7 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../providers/UserProvider";
+import { UserContext } from "../../Context/UserContext";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { userData } = useContext(UserContext);

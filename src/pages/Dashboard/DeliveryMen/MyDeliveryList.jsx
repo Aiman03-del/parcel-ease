@@ -15,7 +15,7 @@ import moment from "moment";
 import { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
-import { UserContext } from "../../../providers/UserProvider";
+import { UserContext } from "../../../Context/UserContext";
 
 const MyDeliveryList = () => {
   const { userData } = useContext(UserContext);

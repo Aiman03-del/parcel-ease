@@ -30,17 +30,24 @@ import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
-const fetchParcels = async () => {
-  const { data } = await axios.get("http://localhost:9000/parcels", {
-    withCredentials: true,
-  });
+const fetchParcels = async (from, to) => {
+  const { data } = await axios.get(
+    "https://server-sigma-plum.vercel.app/parcels",
+    {
+      params: { from, to },
+      withCredentials: true,
+    }
+  );
   return data;
 };
 
 const fetchDeliveryMen = async () => {
-  const { data } = await axios.get("http://localhost:9000/deliverymen", {
-    withCredentials: true,
-  });
+  const { data } = await axios.get(
+    "https://server-sigma-plum.vercel.app/deliverymen",
+    {
+      withCredentials: true,
+    }
+  );
   return data;
 };
 
@@ -50,14 +57,16 @@ const AllParcels = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [deliveryManId, setDeliveryManId] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   const {
     data: parcels = [],
     isLoading: parcelsLoading,
     isError: parcelsError,
   } = useQuery({
-    queryKey: ["parcels"],
-    queryFn: fetchParcels,
+    queryKey: ["parcels", fromDate, toDate],
+    queryFn: () => fetchParcels(fromDate, toDate),
   });
 
   const {
@@ -112,6 +121,11 @@ const AllParcels = () => {
     }
   };
 
+  const handleSearch = (event) => {
+    event.preventDefault();
+    queryClient.invalidateQueries({ queryKey: ["parcels", fromDate, toDate] });
+  };
+
   if (parcelsLoading || deliveryMenLoading)
     return <div className="text-center">Loading...</div>;
   if (parcelsError || deliveryMenError)
@@ -125,6 +139,30 @@ const AllParcels = () => {
         <title> ParcelEase | All Parcel</title>
       </Helmet>
       <h1 className="text-2xl font-bold mb-6 text-center">All Parcels</h1>
+      <form onSubmit={handleSearch} className="mb-6 flex gap-4 justify-center">
+        <div>
+          <label className="block font-medium mb-2">From Date</label>
+          <Input
+            type="date"
+            value={fromDate}
+            onChange={(e) => setFromDate(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="block font-medium mb-2">To Date</label>
+          <Input
+            type="date"
+            value={toDate}
+            onChange={(e) => setToDate(e.target.value)}
+          />
+        </div>
+        <Button
+          type="submit"
+          className="self-end bg-blue-500 hover:bg-blue-600"
+        >
+          Search
+        </Button>
+      </form>
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>

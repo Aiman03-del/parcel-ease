@@ -2,7 +2,7 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import LoadingSpinner from "../components/Shared/LoadingSpinner";
-import { UserContext } from "../providers/UserProvider";
+import { UserContext } from "../Context/UserContext";
 
 const AdminRoute = ({ children }) => {
   const { userData, loading } = useContext(UserContext);

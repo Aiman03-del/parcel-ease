@@ -10,13 +10,16 @@ const Notification = () => {
     const fetchNotifications = async () => {
       try {
         const res = await axios.get(
-          "import.meta.env.VITE_API_URL/notifications",
+          `${import.meta.env.VITE_API_URL}/notifications`,
           {
             withCredentials: true,
           }
         );
-        setNotifications(res.data);
-        setUnreadCount(res.data.length);
+        const data = Array.isArray(res.data) ? res.data : [];
+        console.log(data);
+
+        setNotifications(data);
+        setUnreadCount(data.length);
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
@@ -28,13 +31,13 @@ const Notification = () => {
   const markAsRead = async () => {
     try {
       await axios.patch(
-        "import.meta.env.VITE_API_URL/notifications/read",
+        `${import.meta.env.VITE_API_URL}/read`,
         {},
         {
           withCredentials: true,
         }
       );
-      setUnreadCount(0); // Reset unread count after marking as read
+      setUnreadCount(0);
     } catch (error) {
       console.error("Error marking notifications as read:", error);
     }

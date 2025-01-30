@@ -7,7 +7,7 @@ import moment from "moment";
 import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import StarRatings from "react-star-ratings";
-import { UserContext } from "../../../providers/UserProvider";
+import { UserContext } from "../../../Context/UserContext";
 
 const MyReviews = () => {
   const { userData } = useContext(UserContext);
