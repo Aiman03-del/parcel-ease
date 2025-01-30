@@ -42,7 +42,7 @@ const MyProfile = () => {
 
   return (
     <motion.div
-      className="flex items-center justify-center min-h-screen bg-background"
+      className="flex items-center justify-center min-h-screen bg-background p-4 sm:p-6 lg:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

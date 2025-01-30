@@ -10,7 +10,6 @@ const DashboardLayout = ({ userType }) => {
     <div className="relative min-h-screen flex bg-background text-foreground">
       {/* Sidebar */}
       <div>
-        {" "}
         <Sidebar
           userType={userType}
           isOpen={sidebarOpen}
@@ -18,7 +17,9 @@ const DashboardLayout = ({ userType }) => {
         />
       </div>
       <div
-        className={`flex-1 ${sidebarOpen ? "ml-18" : "md:ml-0"} transition-all`}
+        className={`flex-1 ${
+          sidebarOpen ? "ml-18" : "ml-0"
+        } transition-all duration-300 ease-in-out`}
       >
         <div className="p-6">
           <Outlet />

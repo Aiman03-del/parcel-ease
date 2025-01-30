@@ -100,74 +100,76 @@ const MyDeliveryList = () => {
       <Helmet>
         <title> ParcelEase | My Delivery List</title>
       </Helmet>
-      <h1 className="text-2xl font-bold mb-4 text-center sm:text-left">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center sm:text-left">
         My Delivery List
       </h1>
       {isLoading ? (
         <p>Loading...</p>
       ) : parcels.length > 0 ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Booked User</TableHead>
-              <TableHead>Receiver</TableHead>
-              <TableHead>Booked Phone</TableHead>
-              <TableHead>Requested Date</TableHead>
-              <TableHead>Delivery Date</TableHead>
-              <TableHead>Receiver Phone</TableHead>
-              <TableHead>Address</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {parcels.map((parcel) => (
-              <TableRow key={parcel._id}>
-                <TableCell>{parcel.name}</TableCell>
-                <TableCell>{parcel.receiverName}</TableCell>
-                <TableCell>{parcel.phone}</TableCell>
-                <TableCell>
-                  {moment(parcel.createdAt).format("YYYY-MM-DD")}
-                </TableCell>
-                <TableCell>{parcel.deliveryDate}</TableCell>
-                <TableCell>{parcel.receiverPhone}</TableCell>
-                <TableCell>{parcel.deliveryAddress}</TableCell>
-                <TableCell className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() =>
-                      window.open(
-                        `https://maps.google.com/?q=${parcel.receiverAddress}`,
-                        "_blank"
-                      )
-                    }
-                  >
-                    View Location
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    onClick={() => handleCancel(parcel._id)}
-                    disabled={
-                      parcel.status === "Cancelled" ||
-                      parcel.status === "Delivered"
-                    }
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="success"
-                    onClick={() => handleDeliver(parcel._id)}
-                    disabled={
-                      parcel.status === "Cancelled" ||
-                      parcel.status === "Delivered"
-                    }
-                  >
-                    Deliver
-                  </Button>
-                </TableCell>
+        <div className="overflow-x-auto">
+          <Table className="min-w-full">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Booked User</TableHead>
+                <TableHead>Receiver</TableHead>
+                <TableHead>Booked Phone</TableHead>
+                <TableHead>Requested Date</TableHead>
+                <TableHead>Delivery Date</TableHead>
+                <TableHead>Receiver Phone</TableHead>
+                <TableHead>Address</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {parcels.map((parcel) => (
+                <TableRow key={parcel._id}>
+                  <TableCell>{parcel.name}</TableCell>
+                  <TableCell>{parcel.receiverName}</TableCell>
+                  <TableCell>{parcel.phone}</TableCell>
+                  <TableCell>
+                    {moment(parcel.createdAt).format("YYYY-MM-DD")}
+                  </TableCell>
+                  <TableCell>{parcel.deliveryDate}</TableCell>
+                  <TableCell>{parcel.receiverPhone}</TableCell>
+                  <TableCell>{parcel.deliveryAddress}</TableCell>
+                  <TableCell className="flex flex-col sm:flex-row gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() =>
+                        window.open(
+                          `https://maps.google.com/?q=${parcel.receiverAddress}`,
+                          "_blank"
+                        )
+                      }
+                    >
+                      View Location
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleCancel(parcel._id)}
+                      disabled={
+                        parcel.status === "Cancelled" ||
+                        parcel.status === "Delivered"
+                      }
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="success"
+                      onClick={() => handleDeliver(parcel._id)}
+                      disabled={
+                        parcel.status === "Cancelled" ||
+                        parcel.status === "Delivered"
+                      }
+                    >
+                      Deliver
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       ) : (
         <p className="text-center">No parcels assigned to you.</p>
       )}

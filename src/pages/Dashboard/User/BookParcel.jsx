@@ -129,7 +129,7 @@ const BookParcel = () => {
 
   return (
     <motion.div
-      className="flex items-center min-h-screen bg-gray-50"
+      className="flex items-center justify-center min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -137,7 +137,7 @@ const BookParcel = () => {
       <Helmet>
         <title>ParcelEase | Book Parcel</title>
       </Helmet>
-      <Card className="w-full p-6">
+      <Card className="w-full max-w-2xl p-6">
         <CardContent>
           <motion.div
             className="mb-8 text-center"
@@ -145,7 +145,7 @@ const BookParcel = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-2xl font-bold">Book a Parcel</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">Book a Parcel</h1>
           </motion.div>
           <form
             onSubmit={handleSubmit}

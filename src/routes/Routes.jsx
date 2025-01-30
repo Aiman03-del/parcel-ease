@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import Notification from "../components/Notifications";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
 import AdminStatistics from "../pages/Dashboard/Admin/AdminStatistics";
@@ -36,7 +35,6 @@ export const router = createBrowserRouter([
   },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <SignUp /> },
-  { path: "/notifications", element: <Notification /> },
   {
     path: "/dashboard",
     element: (
@@ -154,6 +152,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "/payment-success",
-    element: <PrivateRoute><PaymentSuccess /></PrivateRoute>,
+    element: (
+      <PrivateRoute>
+        <PaymentSuccess />
+      </PrivateRoute>
+    ),
   },
 ]);

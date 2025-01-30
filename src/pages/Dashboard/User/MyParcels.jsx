@@ -92,11 +92,11 @@ const MyParcels = () => {
   const closeModal = () => setSelectedParcel(null);
 
   return (
-    <div className="p-4">
+    <div className="p-4 sm:p-6 lg:p-8">
       <Helmet>
         <title> ParcelEase | My Parcels</title>
       </Helmet>
-      <h1 className="text-2xl font-bold mb-4">My Parcels</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold mb-4">My Parcels</h1>
       <div className="mb-4 flex flex-wrap justify-between items-center">
         <div>
           <label htmlFor="filter" className="mr-2">
@@ -117,107 +117,114 @@ const MyParcels = () => {
           </Select>
         </div>
       </div>
-      <motion.table
-        className="w-full table-auto border-collapse border border-gray-300"
+      <motion.div
+        className="overflow-x-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <thead>
-          <tr className="bg-gray-200 text-sm">
-            <th className="border p-2 whitespace-nowrap">Parcel Type</th>
-            <th className="border p-2 whitespace-nowrap">
-              Requested Delivery Date
-            </th>
-            <th className="border p-2 whitespace-nowrap">
-              Approx. Delivery Date
-            </th>
-            <th className="border p-2 whitespace-nowrap">Booking Date</th>
-            <th className="border p-2 whitespace-nowrap">Delivery Man ID</th>
-            <th className="border p-2 whitespace-nowrap">Status</th>
-            <th className="border p-2 whitespace-nowrap">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredParcels.map((parcel) => (
-            <tr key={parcel._id} className="text-center">
-              <td className="border p-2 whitespace-nowrap">
-                {parcel.parcelType}
-              </td>
-              <td className="border p-2 whitespace-nowrap">
-                {parcel.deliveryDate}
-              </td>
-              <td className="border p-2 whitespace-nowrap">
-                {parcel.deliveryDate || "-"}
-              </td>
-              <td className="border p-2 whitespace-nowrap">
-                {new Date(parcel.createdAt).toLocaleDateString()}
-              </td>
-              <td className="border p-2 whitespace-nowrap">
-                {parcel.deliveryManId || "-"}
-              </td>
-              <td className="border p-2 whitespace-nowrap capitalize">
-                {parcel.status}
-              </td>
-              <td className="border p-2 whitespace-nowrap space-x-2 flex justify-center">
-                <Button
-                  onClick={() =>
-                    navigate(`/dashboard/update-parcel/${parcel._id}`)
-                  }
-                  className="px-3 py-1 bg-blue-500 text-white rounded disabled:opacity-50"
-                  disabled={parcel.status !== "pending"}
-                  data-tooltip-id="update"
-                  data-tooltip-content="Update"
-                  data-tooltip-place="top"
-                >
-                  <FaEdit />
-                  <Tooltip id="update" place="top" type="dark" effect="solid" />
-                </Button>
-                <Button
-                  onClick={() => handleCancel(parcel._id)}
-                  className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50"
-                  disabled={parcel.status !== "pending"}
-                  data-tooltip-id="cancel"
-                  data-tooltip-content="Cancel"
-                  data-tooltip-place="top"
-                >
-                  <FaTrashAlt />
-                  <Tooltip id="cancel" place="top" type="dark" effect="solid" />
-                </Button>
-                {parcel.status === "Delivered" && (
+        <table className="w-full table-auto border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200 text-sm">
+              <th className="border p-2 whitespace-nowrap">Parcel Type</th>
+              <th className="border p-2 whitespace-nowrap">
+                Requested Delivery Date
+              </th>
+              <th className="border p-2 whitespace-nowrap">
+                Approx. Delivery Date
+              </th>
+              <th className="border p-2 whitespace-nowrap">Booking Date</th>
+              <th className="border p-2 whitespace-nowrap">Delivery Man ID</th>
+              <th className="border p-2 whitespace-nowrap">Status</th>
+              <th className="border p-2 whitespace-nowrap">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredParcels.map((parcel) => (
+              <tr key={parcel._id} className="text-center">
+                <td className="border p-2 ">{parcel.parcelType}</td>
+                <td className="border p-2 ">{parcel.deliveryDate}</td>
+                <td className="border p-2 ">{parcel.deliveryDate || "-"}</td>
+                <td className="border p-2 ">
+                  {new Date(parcel.createdAt).toLocaleDateString()}
+                </td>
+                <td className="border p-2 ">{parcel.deliveryManId || "-"}</td>
+                <td className="border p-2  capitalize">{parcel.status}</td>
+                <td className="border p-2  space-x-2 flex justify-center">
                   <Button
-                    onClick={() => handleReviewClick(parcel)}
-                    className="px-3 py-1 bg-green-500 text-white rounded"
-                    data-tooltip-content="Review"
-                    data-tooltip-id="review"
+                    onClick={() =>
+                      navigate(`/dashboard/update-parcel/${parcel._id}`)
+                    }
+                    className="px-3 py-1 bg-blue-500 text-white rounded disabled:opacity-50"
+                    disabled={parcel.status !== "pending"}
+                    data-tooltip-id="update"
+                    data-tooltip-content="Update"
                     data-tooltip-place="top"
                   >
-                    <FaStar />
+                    <FaEdit />
                     <Tooltip
-                      id="review"
+                      id="update"
                       place="top"
                       type="dark"
                       effect="solid"
                     />
                   </Button>
-                )}
-                {parcel.status === "pending" && (
                   <Button
-                    onClick={() => handlePayClick(parcel)}
-                    className="px-3 py-1 bg-yellow-500 text-white rounded"
-                    data-tooltip-id="pay"
-                    data-tooltip-content="Pay"
+                    onClick={() => handleCancel(parcel._id)}
+                    className="px-3 py-1 bg-red-500 text-white rounded disabled:opacity-50"
+                    disabled={parcel.status !== "pending"}
+                    data-tooltip-id="cancel"
+                    data-tooltip-content="Cancel"
                     data-tooltip-place="top"
                   >
-                    <FaMoneyBillWave />
-                    <Tooltip id="pay" place="top" type="dark" effect="solid" />
+                    <FaTrashAlt />
+                    <Tooltip
+                      id="cancel"
+                      place="top"
+                      type="dark"
+                      effect="solid"
+                    />
                   </Button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </motion.table>
+                  {parcel.status === "Delivered" && (
+                    <Button
+                      onClick={() => handleReviewClick(parcel)}
+                      className="px-3 py-1 bg-green-500 text-white rounded"
+                      data-tooltip-content="Review"
+                      data-tooltip-id="review"
+                      data-tooltip-place="top"
+                    >
+                      <FaStar />
+                      <Tooltip
+                        id="review"
+                        place="top"
+                        type="dark"
+                        effect="solid"
+                      />
+                    </Button>
+                  )}
+                  {parcel.status === "pending" && (
+                    <Button
+                      onClick={() => handlePayClick(parcel)}
+                      className="px-3 py-1 bg-yellow-500 text-white rounded"
+                      data-tooltip-id="pay"
+                      data-tooltip-content="Pay"
+                      data-tooltip-place="top"
+                    >
+                      <FaMoneyBillWave />
+                      <Tooltip
+                        id="pay"
+                        place="top"
+                        type="dark"
+                        effect="solid"
+                      />
+                    </Button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </motion.div>
       {filteredParcels.length === 0 && (
         <p className="text-center text-gray-500 mt-4">No parcels found.</p>
       )}

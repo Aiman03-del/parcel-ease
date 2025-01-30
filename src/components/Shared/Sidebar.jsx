@@ -53,7 +53,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <>
       {/* Mobile Toggle Button */}
-      <div className="md:hidden fixed top-4 left-4 z-50">
+      <div className="fixed top-2 left-2 z-50">
         <button
           onClick={toggleSidebar}
           className=" p-2 bg-slate-800 text-white rounded-lg"

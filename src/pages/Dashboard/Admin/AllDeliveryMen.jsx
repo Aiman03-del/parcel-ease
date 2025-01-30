@@ -55,6 +55,7 @@ const AllDeliveryMen = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
+        className="overflow-x-scroll"
       >
         <Table className="w-full table-auto border-collapse border border-gray-300 mb-4">
           <thead>
