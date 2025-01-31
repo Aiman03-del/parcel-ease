@@ -101,85 +101,88 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white">
-      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+      <div className="flex flex-col max-w-lg p-8 rounded-lg shadow-lg bg-white text-gray-900">
         <div className="mb-8 text-center">
-          <h1 className="my-3 text-4xl font-bold">Sign Up</h1>
-          <p className="text-sm text-gray-400">Welcome to PlantNet</p>
+          <h1 className="my-3 text-3xl font-bold">Create an Account</h1>
+          <p className="text-sm text-gray-500">Join our community</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             {/* Name Input */}
             <div>
-              <label htmlFor="name" className="block mb-2 text-sm">
+              <label htmlFor="name" className="block mb-2 text-sm font-medium">
                 Name
               </label>
               <input
                 type="text"
                 name="name"
                 id="name"
-                placeholder="Enter Your Name Here"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
+                placeholder="Enter Your Name"
+                className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:outline-none"
                 required
               />
             </div>
 
             {/* Phone Input */}
             <div>
-              <label htmlFor="phone" className="block mb-2 text-sm">
+              <label htmlFor="phone" className="block mb-2 text-sm font-medium">
                 Phone Number
               </label>
               <input
                 type="text"
                 name="phone"
                 id="phone"
-                placeholder="Enter Your Phone Number Here"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
+                placeholder="Enter Your Phone Number"
+                className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:outline-none"
                 required
               />
             </div>
 
             {/* Image Input */}
             <div>
-              <label htmlFor="image" className="block mb-2 text-sm">
-                Select Image
+              <label htmlFor="image" className="block mb-2 text-sm font-medium">
+                Profile Picture
               </label>
               <input
                 type="file"
                 id="image"
                 name="image"
                 accept="image/*"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-200 text-gray-900"
+                className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:outline-none"
                 required
               />
             </div>
 
             {/* Email Input */}
             <div>
-              <label htmlFor="email" className="block mb-2 text-sm">
-                Email address
+              <label htmlFor="email" className="block mb-2 text-sm font-medium">
+                Email Address
               </label>
               <input
                 type="email"
                 name="email"
                 id="email"
-                placeholder="Enter Your Email Here"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
+                placeholder="Enter Your Email"
+                className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:outline-none"
                 required
               />
             </div>
 
             {/* Password Input */}
             <div>
-              <label htmlFor="password" className="block mb-2 text-sm">
+              <label
+                htmlFor="password"
+                className="block mb-2 text-sm font-medium"
+              >
                 Password
               </label>
               <input
                 type="password"
                 name="password"
                 id="password"
-                placeholder="*******"
-                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900"
+                placeholder="Enter Your Password"
+                className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:outline-none"
                 required
               />
             </div>
@@ -189,13 +192,13 @@ const SignUp = () => {
           <div>
             <button
               type="submit"
-              className="bg-lime-500 w-full rounded-md py-3 text-white"
+              className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring focus:ring-blue-200 focus:outline-none"
               disabled={loading}
             >
               {loading ? (
                 <TbFidgetSpinner className="animate-spin m-auto" />
               ) : (
-                "Continue"
+                "Sign Up"
               )}
             </button>
           </div>
@@ -204,29 +207,23 @@ const SignUp = () => {
         {/* Social Signup */}
         <div className="flex items-center pt-4 space-x-1">
           <div className="flex-1 h-px sm:w-16 bg-gray-300"></div>
-          <p className="px-3 text-sm text-gray-400">
-            Signup with social accounts
-          </p>
+          <p className="px-3 text-sm text-gray-400">Or sign up with</p>
           <div className="flex-1 h-px sm:w-16 bg-gray-300"></div>
         </div>
         <div
           onClick={handleGoogleSignIn}
-          className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 rounded cursor-pointer hover:bg-gray-200"
+          className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 rounded cursor-pointer hover:bg-gray-100"
         >
           <FcGoogle size={32} />
-          <p>Continue with Google</p>
+          <p>Google</p>
         </div>
 
         {/* Redirect to Login */}
-        <p className="px-6 text-sm text-center text-gray-400">
+        <p className="text-sm text-center text-gray-500">
           Already have an account?{" "}
-          <Link
-            to="/login"
-            className="hover:underline hover:text-lime-500 text-gray-600"
-          >
-            Login
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Log in
           </Link>
-          .
         </p>
       </div>
     </div>

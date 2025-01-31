@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import FeatureCard from "./FeatureCard";
 
 const Features = () => {
@@ -25,7 +26,15 @@ const Features = () => {
   return (
     <section className="features-section py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <h2 className="text-center text-4xl font-bold mb-12">Our Features</h2>
+        <motion.h2
+          className="text-center text-4xl font-bold mb-12"
+          initial={{ opacity: 0, y: -50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          Our Features
+        </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature) => (
             <FeatureCard key={feature.id} feature={feature} />

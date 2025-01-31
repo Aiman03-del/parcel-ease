@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -41,10 +39,15 @@ const BookParcel = () => {
   } = useQuery({
     queryKey: ["locations"],
     queryFn: async () => {
-      const response = await axios.get("/locations");
-      return response.data;
+      const response = await axiosPublic.get("/locations");
+      if (response.headers["content-type"].includes("application/json")) {
+        return response.data;
+      } else {
+        throw new Error("Invalid response format");
+      }
     },
   });
+  console.log(locationData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

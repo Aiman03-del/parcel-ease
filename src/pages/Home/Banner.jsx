@@ -15,11 +15,11 @@ const Banner = () => {
 
       {/* Overlay and Content */}
       <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-60 flex items-center justify-center">
-        <div className="flex flex-col items-center p-10 rounded-lg shadow-lg">
-          <h1 className="text-5xl text-white font-extrabold mb-4 drop-shadow-md">
+        <div className="flex flex-col items-center p-10 rounded-lg shadow-lg max-w-lg mx-4 md:mx-10">
+          <h1 className="text-3xl md:text-5xl text-white font-extrabold mb-4 drop-shadow-md text-center">
             Welcome to Our Platform
           </h1>
-          <p className="text-lg text-white mb-8 drop-shadow-md">
+          <p className="text-base md:text-lg text-white mb-8 drop-shadow-md text-center">
             Discover amazing content and opportunities.
           </p>
           <div className="relative bg-gradient-to-br from-blue-400 to-blue-500 rounded-full p-3 grid place-content-center z-0 max-w-lg mx-2">

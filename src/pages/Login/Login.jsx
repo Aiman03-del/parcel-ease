@@ -47,7 +47,7 @@ const Login = () => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600"
+      className="flex justify-center items-center min-h-screen bg-gray-50"
     >
       <Helmet>
         <title> ParcelEase | Login</title>
@@ -59,8 +59,10 @@ const Login = () => {
         className="flex flex-col max-w-md p-8 rounded-lg shadow-lg bg-white text-gray-900"
       >
         <div className="mb-6 text-center">
-          <h1 className="text-4xl font-extrabold text-indigo-600">Log In</h1>
-          <p className="text-gray-500">Sign in to access your account</p>
+          <h1 className="text-3xl font-bold text-blue-600">Log In</h1>
+          <p className="text-sm text-gray-500">
+            Sign in to access your account
+          </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -75,7 +77,7 @@ const Login = () => {
               name="email"
               id="email"
               required
-              className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-blue-200 focus:outline-none"
             />
           </div>
           <div>
@@ -90,14 +92,14 @@ const Login = () => {
               name="password"
               id="password"
               required
-              className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:ring focus:ring-blue-200 focus:outline-none"
             />
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
-            className="w-full py-3 rounded-md bg-indigo-500 text-white font-bold"
+            className="w-full py-3 rounded-md bg-blue-600 text-white font-bold hover:bg-blue-700 focus:ring focus:ring-blue-200 focus:outline-none"
           >
             {loading ? (
               <TbFidgetSpinner className="animate-spin m-auto" />
@@ -106,7 +108,7 @@ const Login = () => {
             )}
           </motion.button>
         </form>
-        <button className="mt-3 text-sm text-indigo-500 hover:underline">
+        <button className="mt-3 text-sm text-blue-600 hover:underline">
           Forgot password?
         </button>
         <div className="flex items-center my-4">
@@ -118,14 +120,14 @@ const Login = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleGoogleSignIn}
-          className="flex items-center justify-center p-2 border border-gray-300 rounded-md cursor-pointer"
+          className="flex items-center justify-center p-2 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
         >
           <FcGoogle size={28} />
           <p className="ml-3">Continue with Google</p>
         </motion.div>
         <p className="mt-4 text-center text-sm text-gray-500">
           Don't have an account?
-          <Link to="/signup" className="text-indigo-500 hover:underline">
+          <Link to="/signup" className="text-blue-600 hover:underline">
             {" "}
             Sign up
           </Link>

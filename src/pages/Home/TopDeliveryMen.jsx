@@ -25,10 +25,10 @@ const TopDeliveryMen = () => {
   }, [axiosPublic]);
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="container mx-auto px-6 text-center">
         <motion.h2
-          className="text-3xl font-bold text-gray-800 mb-6"
+          className="text-4xl font-extrabold text-gray-800 mb-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
@@ -36,7 +36,7 @@ const TopDeliveryMen = () => {
           Our Top Delivery Men
         </motion.h2>
         <motion.p
-          className="text-gray-600 mb-12"
+          className="text-gray-700 mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -48,16 +48,19 @@ const TopDeliveryMen = () => {
           {deliveryMen.map((man, index) => (
             <motion.div
               key={man._id}
-              className="bg-white shadow-lg rounded-lg p-8 text-left"
+              className="bg-white shadow-xl rounded-lg p-8 text-left transform transition-transform duration-500 hover:scale-105"
               whileHover={{ scale: 1.05 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
             >
-              <img
+              <motion.img
                 src={man.image}
                 alt={man.name}
                 className="w-24 h-24 rounded-full mx-auto mb-4"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
               />
               <h3 className="text-xl font-semibold text-gray-800 text-center mb-2">
                 {man.name}

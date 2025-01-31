@@ -64,7 +64,6 @@ const Navbar = () => {
         )
       );
 
-      // Decrease unread count
       setUnreadCount((prev) => (prev > 0 ? prev - 1 : 0));
     } catch (error) {
       console.error("Error marking notification as read:", error);
@@ -108,22 +107,22 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className="bg-gradient-to-r from-blue-500 to-teal-500 shadow-lg px-6 py-4 flex justify-between items-center sticky top-0 z-50"
+      className="bg-white bg-opacity-30 shadow-lg px-6 py-4 flex flex-row md:flex-row justify-between items-center sticky top-0 z-50"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2  md:mb-0">
         <img src={logoImg} alt="Parcel Ease" className="h-10 w-10 rounded-md" />
         <Link
           to="/"
-          className="text-2xl font-semibold text-white hover:text-gray-200 transition-all"
+          className="hidden md:block lg:text-2xl font-semibold text-white hover:text-gray-200 transition-all whitespace-nowrap"
         >
           Parcel Ease
         </Link>
       </div>
-      <div className="flex items-center space-x-6">
-        <div className="relative flex items-center">
+      <div className="flex items-center space-x-2">
+        <div className="relative flex items-center space-x-2">
           <motion.div
             className="relative cursor-pointer"
             whileHover={{ scale: 1.2 }}
@@ -178,7 +177,7 @@ const Navbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center">
             {" "}
             <Link
               to="/dashboard"
