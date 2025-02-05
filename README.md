@@ -4,7 +4,7 @@ A modern and efficient parcel delivery management system to simplify and streaml
 
 🔗 **Live Website:** [Parcel Ease](https://parcel-ease-76d37.web.app/)  
 
-![Parcel Ease Banner](https://your-image-link.com/banner.jpg)
+![Parcel Ease Banner](https://github.com/user-attachments/assets/0bb67b43-526c-44b0-b20a-96588c3db10c)
 
 ---
 
