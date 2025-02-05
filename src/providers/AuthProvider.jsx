@@ -37,10 +37,7 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     setLoading(true);
-    await signOut(auth);
-    setUser(null);
-    localStorage.removeItem("token");
-    window.location.href = "/login"; // Redirect to login page after logout
+    return signOut(auth);
   };
 
   const updateUserProfile = (name, photo) => {
