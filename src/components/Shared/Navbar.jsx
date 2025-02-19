@@ -13,7 +13,7 @@ import { IoNotificationsSharp } from "react-icons/io5";
 import { SiRedash } from "react-icons/si";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import logoImg from "../../assets/images/logo-square.png";
+import logoImg from "../../assets/images/Logo.png";
 import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
