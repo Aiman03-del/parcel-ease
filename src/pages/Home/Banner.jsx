@@ -11,7 +11,7 @@ const Banner = () => {
 
 const BackgroundVideo = () => (
   <video
-    className="absolute top-0 left-0 w-full h-full object-cover"
+    className="absolute -top-24 left-0 w-full h-full object-cover"
     autoPlay
     loop
     muted
@@ -22,7 +22,7 @@ const BackgroundVideo = () => (
 );
 
 const OverlayContent = () => (
-  <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-60 flex items-center justify-center">
+  <div className="absolute -top-24 left-0 w-full h-full bg-black bg-opacity-60 flex items-center justify-center">
     <div className="flex flex-col items-center p-10 rounded-lg shadow-lg max-w-lg mx-4 md:mx-10">
       <Header />
       <Description />
