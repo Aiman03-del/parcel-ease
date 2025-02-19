@@ -10,7 +10,6 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { IoNotificationsSharp } from "react-icons/io5";
-import { SiRedash } from "react-icons/si";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import logoImg from "../../assets/images/Logo.png";
@@ -122,14 +121,34 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4">
+          <Link
+            to="/about"
+            className="text-white hover:text-gray-300 transition-all"
+          >
+            About
+          </Link>
+          <Link
+            to="/services"
+            className="text-white hover:text-gray-300 transition-all"
+          >
+            Services
+          </Link>
+          <Link
+            to="/contact"
+            className="text-white hover:text-gray-300 transition-all"
+          >
+            Contact
+          </Link>
+        </div>
         <div className="relative flex items-center space-x-2">
           <motion.div
-            className="relative cursor-pointer"
+            className="relative cursor-pointer text-white hover:text-gray-300 transition-all"
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleNotificationClick}
           >
-            <IoNotificationsSharp className="text-white text-2xl" />
+            Notifications
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-2 bg-red-600 text-white text-xs rounded-full px-1">
                 {unreadCount}
@@ -168,6 +187,22 @@ const Navbar = () => {
                   Dashboard
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link
+                  to="/profile"
+                  className="w-full text-left px-4 py-2 text-blue-500 hover:bg-gray-100 transition"
+                >
+                  Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link
+                  to="/settings"
+                  className="w-full text-left px-4 py-2 text-blue-500 hover:bg-gray-100 transition"
+                >
+                  Settings
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={handleLogout}
                 className="text-red-600 hover:bg-gray-100 transition px-4 py-2"
@@ -177,14 +212,12 @@ const Navbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <div className="flex items-center">
-            {" "}
+          <div className="flex items-center space-x-4">
             <Link
-              to="/dashboard"
-              className="flex items-center w-full text-left px-4 py-2 text-yellow-500  transition "
+              to="/signup"
+              className="text-white hover:text-gray-300 transition-all"
             >
-              <SiRedash className="text-2xl" />
-              Dashboard
+              Register
             </Link>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
               <Button asChild>
