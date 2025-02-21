@@ -44,11 +44,11 @@ const TopDeliveryMen = () => {
           Meet our most efficient and highly-rated delivery professionals.
         </motion.p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 justify-between gap-8">
           {deliveryMen.map((man, index) => (
             <motion.div
               key={man._id}
-              className="bg-white shadow-xl rounded-lg p-8 text-left transform transition-transform duration-500 hover:scale-105"
+              className="bg-white shadow-xl rounded-lg p-8 text-left transform transition-transform duration-200 hover:scale-105"
               whileHover={{ scale: 1.05 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

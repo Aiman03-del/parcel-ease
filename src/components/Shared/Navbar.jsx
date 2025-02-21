@@ -9,7 +9,6 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { IoNotificationsSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import logoImg from "../../assets/images/Logo.png";
