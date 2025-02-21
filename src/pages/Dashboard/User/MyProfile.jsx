@@ -11,21 +11,27 @@ const MyProfile = () => {
   const [image, setImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber || "");
+  const [address, setAddress] = useState(user?.address || "");
 
-  const handleImageUpload = async () => {
-    if (!file) return;
+console.log(user);
+  const handleProfileUpdate = async () => {
+    if (!file && phoneNumber === user.phoneNumber && address === user.address) return;
 
-    toast.info("Uploading image, please wait...");
+    toast.info("Updating profile, please wait...");
     setIsUploading(true);
 
     try {
-      const imageUrl = await imageUpload(file);
-      setImage(imageUrl);
-      await updateUserProfile(user.displayName, imageUrl);
-      toast.success("Image uploaded and profile updated!");
+      let imageUrl = image;
+      if (file) {
+        imageUrl = await imageUpload(file);
+        setImage(imageUrl);
+      }
+      await updateUserProfile(user.displayName, imageUrl, phoneNumber, address);
+      toast.success("Profile updated successfully!");
     } catch (error) {
-      console.error("Image upload failed:", error);
-      toast.error("Failed to upload image!");
+      console.error("Profile update failed:", error);
+      toast.error("Failed to update profile!");
     } finally {
       setIsUploading(false);
     }
@@ -42,7 +48,7 @@ const MyProfile = () => {
 
   return (
     <motion.div
-      className="flex items-center justify-center min-h-screen bg-background p-4 sm:p-6 lg:p-8"
+      className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4 sm:p-6 lg:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -78,16 +84,31 @@ const MyProfile = () => {
             />
           </div>
           <div className="text-center">
-            <h3 className="text-lg font-medium text-foreground">
-              {user.displayName}
-            </h3>
-            <p className="text-sm text-muted-foreground">{user.email}</p>
+            <h3 className="text-lg font-medium">{user.displayName}</h3>
+            <p className="text-sm">{user.email}</p>
+            <div className="mt-4">
+              <label className="block text-sm font-medium">Phone Number</label>
+              <input
+                type="text"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium">Address</label>
+              <textarea
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+            </div>
           </div>
         </motion.div>
 
         <div className="mt-6 flex justify-center">
           <button
-            onClick={handleImageUpload}
+            onClick={handleProfileUpdate}
             className={`btn bg-blue-600 rounded p-2 max-w-sm ${
               isUploading && "btn-disabled"
             }`}

@@ -29,18 +29,16 @@ const MyReviews = () => {
   });
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <Helmet>
         <title> ParcelEase | My Reviews</title>
       </Helmet>
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center sm:text-left text-gray-800">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center sm:text-left">
         My Reviews
       </h1>
 
       {isLoading ? (
-        <p className="text-center text-gray-500 animate-pulse">
-          Loading reviews...
-        </p>
+        <p className="text-center animate-pulse">Loading reviews...</p>
       ) : reviews.length > 0 ? (
         <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review, index) => (
@@ -60,12 +58,8 @@ const MyReviews = () => {
                       className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border border-gray-300"
                     />
                     <div>
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-200">
-                        {review.userName}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {moment(review.createdAt).format("MMMM Do, YYYY")}
-                      </p>
+                      <h3 className="font-semibold">{review.userName}</h3>
+                      <p className="text-sm">{moment(review.createdAt).format("MMMM Do, YYYY")}</p>
                     </div>
                   </div>
 
@@ -80,9 +74,7 @@ const MyReviews = () => {
                     />
                   </div>
 
-                  <p className="text-gray-700 dark:text-gray-300 mt-3 italic">
-                    "{review.feedback}"
-                  </p>
+                  <p className="mt-3 italic">"{review.feedback}"</p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -93,7 +85,7 @@ const MyReviews = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-center text-gray-500"
+          className="text-center"
         >
           No reviews available.
         </motion.p>

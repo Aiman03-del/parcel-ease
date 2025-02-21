@@ -105,7 +105,7 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className="bg-[#010617]  shadow-lg px-6 py-4 flex flex-row md:flex-row justify-between items-center sticky top-0 z-50"
+      className="bg-slate-800  shadow-lg px-6 py-4 flex flex-row md:flex-row justify-between items-center sticky top-0 z-50"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -188,7 +188,7 @@ const Navbar = () => {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link
-                  to="/profile"
+                  to="/my-profile"
                   className="w-full text-left px-4 py-2 text-blue-500 hover:bg-gray-100 transition"
                 >
                   Profile

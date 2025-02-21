@@ -45,7 +45,7 @@ const AllDeliveryMen = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-white dark:bg-gray-800 text-black dark:text-white">
       <Helmet>
         <title> ParcelEase | All Delivery Men</title>
       </Helmet>
@@ -59,7 +59,7 @@ const AllDeliveryMen = () => {
       >
         <Table className="w-full table-auto border-collapse border border-gray-300 mb-4">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="bg-gray-200 dark:bg-gray-700">
               <th className="border p-2">Name</th>
               <th className="border p-2">Phone Number</th>
               <th className="border p-2">Parcels Delivered</th>
@@ -69,7 +69,7 @@ const AllDeliveryMen = () => {
           <tbody>
             {deliveryMen.length > 0 ? (
               deliveryMen.map((man) => (
-                <tr key={man._id} className="hover:bg-gray-100">
+                <tr key={man._id} className="hover:bg-gray-100 dark:hover:bg-gray-600">
                   <td className="border p-2">{man.name}</td>
                   <td className="border p-2">{man.phone}</td>
                   <td className="border p-2">{man.totalDelivered || 0}</td>

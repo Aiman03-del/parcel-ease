@@ -134,7 +134,7 @@ const AllParcels = () => {
     );
 
   return (
-    <div className="p-6 max-w-screen-lg mx-auto">
+    <div className="p-6 max-w-screen-lg mx-auto bg-white dark:bg-gray-800 text-black dark:text-white">
       <Helmet>
         <title> ParcelEase | All Parcel</title>
       </Helmet>
@@ -166,7 +166,7 @@ const AllParcels = () => {
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-gray-200 dark:bg-gray-700">
               <TableHead>Name</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Booking Date</TableHead>
@@ -184,7 +184,7 @@ const AllParcels = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 whileHover={{ scale: 1.02 }}
-                className="hover:bg-gray-100"
+                className="hover:bg-gray-100 dark:hover:bg-gray-600"
               >
                 <TableCell>{parcel.name}</TableCell>
                 <TableCell>{parcel.phone}</TableCell>
@@ -197,7 +197,7 @@ const AllParcels = () => {
                 <TableCell>
                   <Button
                     onClick={() => handleManageClick(parcel)}
-                    className="bg-green-500 hover:bg-green-600"
+                    className="bg-green-500 hover:bg-green-600 text-white"
                   >
                     Manage
                   </Button>

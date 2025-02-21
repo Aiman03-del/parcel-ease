@@ -66,7 +66,7 @@ const AllUsers = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto bg-white dark:bg-gray-800 text-black dark:text-white">
       <Helmet>
         <title> ParcelEase | All Users</title>
       </Helmet>
@@ -86,7 +86,7 @@ const AllUsers = () => {
           >
             <Table className="w-full table-auto border-collapse border border-gray-300 text-sm md:text-base mb-4">
               <thead>
-                <tr className="bg-gray-200">
+                <tr className="bg-gray-200 dark:bg-gray-700">
                   <th className="border p-2">Name</th>
                   <th className="border p-2">Phone</th>
                   <th className="border p-2">Parcels Booked</th>
@@ -97,32 +97,24 @@ const AllUsers = () => {
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user._id} className="hover:bg-gray-100">
+                  <tr key={user._id} className="hover:bg-gray-100 dark:hover:bg-gray-600">
                     <td className="border p-2">{user.name}</td>
                     <td className="border p-2">{user.phone || "N/A"}</td>
-                    <td className="border p-2">
-                      {user.totalParcelBooked || 0}
-                    </td>
-                    <td className="border p-2">
-                      ${user.totalSpent ? user.totalSpent.toFixed(2) : "0.00"}
-                    </td>
+                    <td className="border p-2">{user.totalParcelBooked || 0}</td>
+                    <td className="border p-2">${user.totalSpent ? user.totalSpent.toFixed(2) : "0.00"}</td>
                     <td className="border p-2">{user.role.toUpperCase()}</td>
                     <td className="border p-2">
                       {user.role === "admin" && (
                         <>
                           <Button
                             className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                            onClick={() =>
-                              handleUpdateUserRole(user._id, "deliverymen")
-                            }
+                            onClick={() => handleUpdateUserRole(user._id, "deliverymen")}
                           >
                             Make Delivery Man
                           </Button>
                           <Button
                             className="bg-gray-500 text-white px-4 py-2 rounded"
-                            onClick={() =>
-                              handleUpdateUserRole(user._id, "user")
-                            }
+                            onClick={() => handleUpdateUserRole(user._id, "user")}
                           >
                             Make User
                           </Button>
@@ -132,17 +124,13 @@ const AllUsers = () => {
                         <>
                           <Button
                             className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                            onClick={() =>
-                              handleUpdateUserRole(user._id, "admin")
-                            }
+                            onClick={() => handleUpdateUserRole(user._id, "admin")}
                           >
                             Make Admin
                           </Button>
                           <Button
                             className="bg-gray-500 text-white px-4 py-2 rounded"
-                            onClick={() =>
-                              handleUpdateUserRole(user._id, "user")
-                            }
+                            onClick={() => handleUpdateUserRole(user._id, "user")}
                           >
                             Make User
                           </Button>
@@ -152,17 +140,13 @@ const AllUsers = () => {
                         <>
                           <Button
                             className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                            onClick={() =>
-                              handleUpdateUserRole(user._id, "admin")
-                            }
+                            onClick={() => handleUpdateUserRole(user._id, "admin")}
                           >
                             Make Admin
                           </Button>
                           <Button
                             className="bg-green-500 text-white px-4 py-2 rounded"
-                            onClick={() =>
-                              handleUpdateUserRole(user._id, "deliverymen")
-                            }
+                            onClick={() => handleUpdateUserRole(user._id, "deliverymen")}
                           >
                             Make Delivery Man
                           </Button>

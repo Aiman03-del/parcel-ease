@@ -92,7 +92,7 @@ const MyParcels = () => {
   const closeModal = () => setSelectedParcel(null);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <Helmet>
         <title> ParcelEase | My Parcels</title>
       </Helmet>
