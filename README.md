@@ -2,7 +2,7 @@
 
 ## Admin Credentials
 
-- **User Email:** admin@example.com
+- **Admin Email:** admin@example.com
 - **Password:** admin123
 
 ## Live Site URL
