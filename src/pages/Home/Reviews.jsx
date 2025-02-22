@@ -24,7 +24,7 @@ const reviews = [
 
 const Reviews = () => {
   return (
-    <div className="reviews-container mx-auto bg-gray-100 p-8 rounded-lg shadow-lg flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-8">
+    <div className="reviews-container mx-auto p-8 rounded-lg shadow-lg flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-8">
       <div className="w-full md:w-1/2 mb-4 md:mb-0">
         <h2 className="text-8xl font-semibold mb-8 text-center md:text-left">
           What customers say about us
@@ -50,7 +50,7 @@ const Reviews = () => {
                   <p className="text-lg font-medium text-center md:text-left">
                     {review.message}
                   </p>
-                  <p className="text-sm text-gray-500 mt-2 text-center md:text-left">
+                  <p className="text-sm mt-2 text-center md:text-left">
                     - {review.name}
                   </p>
                 </div>

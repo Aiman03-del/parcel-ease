@@ -6,7 +6,7 @@ const PaymentSuccess = () => {
   const { width, height } = useWindowSize();
 
   return (
-    <div className="p-4 text-center">
+    <div className="p-4 text-center bg-white dark:bg-black text-black dark:text-white">
       <Helmet>
         <title>ParcelEase | Payment Success</title>
       </Helmet>

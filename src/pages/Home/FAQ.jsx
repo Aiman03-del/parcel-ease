@@ -17,9 +17,9 @@ const faqs = [
 
 const FAQ = () => {
   return (
-    <div className="faq-container mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <div className="faq-container mx-auto p-8 rounded-lg shadow-lg">
       <motion.h2 
-        className="text-4xl font-semibold mb-4 text-center text-blue-500"
+        className="text-4xl font-semibold mb-4 text-center"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -35,8 +35,8 @@ const FAQ = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: index * 0.2, duration: 0.5 }}
           >
-            <h3 className="text-2xl font-semibold mb-2 text-blue-500">{faq.question}</h3>
-            <p className="text-gray-700">{faq.answer}</p>
+            <h3 className="text-2xl font-semibold mb-2">{faq.question}</h3>
+            <p >{faq.answer}</p>
           </motion.div>
         ))}
       </div>

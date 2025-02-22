@@ -41,11 +41,11 @@ const AllDeliveryMen = () => {
   }
 
   if (isError) {
-    return <div>Error loading delivery men.</div>;
+    return <div className="text-black dark:text-white">Error loading delivery men.</div>;
   }
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-800 text-black dark:text-white">
+    <div className="p-6 bg-white dark:bg-black text-black dark:text-white">
       <Helmet>
         <title> ParcelEase | All Delivery Men</title>
       </Helmet>
@@ -78,7 +78,7 @@ const AllDeliveryMen = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="border p-2 text-center">
+                <td colSpan="4" className="border p-2 text-center text-black dark:text-white">
                   No delivery men found.
                 </td>
               </tr>

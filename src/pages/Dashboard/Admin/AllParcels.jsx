@@ -127,14 +127,14 @@ const AllParcels = () => {
   };
 
   if (parcelsLoading || deliveryMenLoading)
-    return <div className="text-center">Loading...</div>;
+    return <div className="text-center text-black dark:text-white">Loading...</div>;
   if (parcelsError || deliveryMenError)
     return (
-      <div className="text-center text-red-500">Failed to fetch data.</div>
+      <div className="text-center text-red-500 dark:text-red-400">Failed to fetch data.</div>
     );
 
   return (
-    <div className="p-6 max-w-screen-lg mx-auto bg-white dark:bg-gray-800 text-black dark:text-white">
+    <div className="p-6 max-w-screen-lg mx-auto bg-white dark:bg-black text-black dark:text-white">
       <Helmet>
         <title> ParcelEase | All Parcel</title>
       </Helmet>

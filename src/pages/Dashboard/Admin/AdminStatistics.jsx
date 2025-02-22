@@ -7,7 +7,7 @@ const AdminStatistics = () => {
   const { data, error, isLoading } = useBookingStats();
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div className="text-black dark:text-white">Error: {error.message}</div>;
 
   const barChartData = {
     chart: {
@@ -46,7 +46,7 @@ const AdminStatistics = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-white dark:bg-gray-800 text-black dark:text-white">
+    <div className="p-4 sm:p-6 lg:p-8 bg-white dark:bg-black text-black dark:text-white">
       <Helmet>
         <title> ParcelEase | Statistics</title>
       </Helmet>

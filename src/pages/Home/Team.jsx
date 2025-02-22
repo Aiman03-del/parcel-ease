@@ -26,9 +26,9 @@ const teamMembers = [
 
 const Team = () => {
   return (
-    <div className="bg-white p-8 rounded-lg shadow-lg">
+    <div className="p-8 rounded-lg shadow-lg">
       <motion.h2 
-        className="text-4xl font-semibold mb-4 text-center text-blue-500"
+        className="text-4xl font-semibold mb-4 text-center"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -48,8 +48,8 @@ const Team = () => {
               className="w-32 h-32 rounded-full object-cover mb-4"
             />
             <div className="text-center">
-              <h3 className="text-2xl font-semibold text-blue-500">{member.name}</h3>
-              <p className="text-gray-500">{member.role}</p>
+              <h3 className="text-2xl font-semibold">{member.name}</h3>
+              <p>{member.role}</p>
             </div>
           </motion.div>
         ))}

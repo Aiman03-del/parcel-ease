@@ -66,7 +66,7 @@ const AllUsers = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto bg-white dark:bg-gray-800 text-black dark:text-white">
+    <div className="p-6 max-w-7xl mx-auto bg-white dark:bg-black text-black dark:text-white">
       <Helmet>
         <title> ParcelEase | All Users</title>
       </Helmet>
@@ -74,7 +74,7 @@ const AllUsers = () => {
 
       {isLoading && <LoadingSpinner />}
       {isError && (
-        <div className="text-center text-red-500">Failed to load users.</div>
+        <div className="text-center text-red-500 dark:text-red-400">Failed to load users.</div>
       )}
 
       {!isLoading && !isError && (

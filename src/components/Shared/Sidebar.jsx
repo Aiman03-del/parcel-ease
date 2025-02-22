@@ -14,7 +14,7 @@ import {
 import { Link } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
 
-const Sidebar = ({ isOpen, toggleSidebar }) => {
+const Sidebar = ({ isOpen, toggleSidebar, theme }) => {
   const { userData } = useContext(UserContext);
   const userRole = userData?.role;
 
@@ -50,13 +50,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   const menu = menuItems[normalizedUserRole] || menuItems["User"];
 
+  const themeClasses = theme === "dark" ? "bg-black text-white" : "bg-white text-black";
+
   return (
     <>
       {/* Mobile Toggle Button */}
       <div className="fixed top-2 left-2 z-50">
         <button
           onClick={toggleSidebar}
-          className=" p-2 bg-slate-800 text-white rounded-lg"
+          className={`p-2 ${themeClasses} rounded-lg`}
         >
           <FaBars />
         </button>
@@ -67,13 +69,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         initial={{ x: -250 }}
         animate={{ x: isOpen ? 0 : -250 }}
         transition={{ type: "spring", stiffness: 100 }}
-        className={`w-64 bg-slate-800 shadow-md h-full  flex flex-col md:static fixed top-0 left-0 z-40`}
+        className={`w-64 ${themeClasses} shadow-md h-full flex flex-col md:static fixed top-0 left-0 z-40`}
       >
         {/* Home Button */}
         <div className="p-6 text-lg font-bold">
           <Link
             to="/"
-            className="flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg text-white transition-colors"
+            className={`flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg transition-colors ${theme === "dark" ? "text-white" : "text-black"}`}
           >
             <FaHome className="mr-3 text-xl " />
             Home
@@ -86,7 +88,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <Link
               key={item.name}
               to={item.path}
-              className="flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg transition-colors text-white text-lg whitespace-nowrap"
+              className={`flex items-center px-6 py-2 hover:bg-slate-600 rounded-lg transition-colors ${theme === "dark" ? "text-white" : "text-black"} text-lg whitespace-nowrap`}
             >
               <item.icon className="mr-3 text-xl" />
               <span>{item.name}</span>

@@ -29,7 +29,7 @@ const MyReviews = () => {
   });
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="p-4 sm:p-6 lg:p-8 bg-white dark:bg-black text-gray-900 dark:text-gray-100">
       <Helmet>
         <title> ParcelEase | My Reviews</title>
       </Helmet>

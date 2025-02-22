@@ -17,15 +17,15 @@ const Home = () => {
         <title> ParcelEase | Order Your Parcel</title>
       </Helmet>
       <Banner />
-      <Features />
+      <Features id="features" />
       <Statistics />
       <TopDeliveryMen />
       <Newsletter />
       <Reviews />
-      <AboutUs />
+      <AboutUs id="about" />
       <Team />
       <FAQ /> 
-      <ContactUs />
+      <ContactUs id="contact" />
     </div>
   );
 };

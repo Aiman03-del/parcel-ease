@@ -92,7 +92,7 @@ const MyParcels = () => {
   const closeModal = () => setSelectedParcel(null);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="p-4 sm:p-6 lg:p-8 bg-white dark:bg-black text-black dark:text-white">
       <Helmet>
         <title> ParcelEase | My Parcels</title>
       </Helmet>
@@ -125,7 +125,7 @@ const MyParcels = () => {
       >
         <table className="w-full table-auto border-collapse border border-gray-300">
           <thead>
-            <tr className="bg-gray-200 text-sm">
+            <tr className=" text-sm">
               <th className="border p-2 whitespace-nowrap">Parcel Type</th>
               <th className="border p-2 whitespace-nowrap">
                 Requested Delivery Date

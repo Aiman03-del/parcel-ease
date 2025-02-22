@@ -92,7 +92,7 @@ const MyDeliveryList = () => {
 
   return (
     <motion.div
-      className="p-4 sm:p-6 lg:p-8 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+      className="p-4 sm:p-6 lg:p-8 bg-white dark:bg-black text-gray-900 dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

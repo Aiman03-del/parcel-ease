@@ -48,7 +48,7 @@ console.log(user);
 
   return (
     <motion.div
-      className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4 sm:p-6 lg:p-8"
+      className="flex items-center justify-center min-h-screen bg-white dark:bg-black text-black dark:text-white p-4 sm:p-6 lg:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
